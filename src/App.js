@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import ChatbotLanding from './components/chatbot.js'
-import TreeVisualization from './components/tree.js';
 import './App.css'
 
 const App = () => {
