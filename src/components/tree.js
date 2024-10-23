@@ -24,7 +24,7 @@ const treeData = {
   ]
 };
 
-const TreeVisualization = ({ isVisible }) => {
+const TreeVisualization = ({ isVisible },props) => {
   const svgRef = useRef(null);
 
   useEffect(() => {
@@ -33,8 +33,10 @@ const TreeVisualization = ({ isVisible }) => {
       svg.selectAll('*').remove(); // Clear previous render
 
       const width = 800;
-      const height = 600;
+      const height =600;
       const margin = { top: 20, right: 90, bottom: 30, left: 90 };
+      svg.attr('viewBox', `0 0 ${width} ${height}`)
+           .attr('preserveAspectRatio', 'xMidYMid meet');
 
       const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -48,10 +50,11 @@ const TreeVisualization = ({ isVisible }) => {
 
       function collapse(d) {
         if (d.children) {
-          d._children = d.children;
-          d.children = null;
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
         }
-      }
+    }
 
       update(root);
 
@@ -161,9 +164,7 @@ const TreeVisualization = ({ isVisible }) => {
   if (!isVisible) return null;
 
   return (
-    <div className="z-10 bg-white p-4 rounded-lg shadow-xl">
-      <svg ref={svgRef} width="800" height="600"></svg>
-    </div>
+      <svg ref={svgRef} className='h-full w-full' {...props}></svg>
   );
 };
 
