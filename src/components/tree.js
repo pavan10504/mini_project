@@ -8,18 +8,56 @@ const treeData = {
     {
       name: 'Science',
       children: [
-        { name: 'PCMB', children: [{ name: 'MBBS' }, { name: 'Engineering' }] },
+        { 
+          name: 'PCMB', 
+          children: [
+            { 
+              name: 'Medicine & Healthcare',
+              children: [
+                { name: 'MBBS' },
+                { name: 'BDS' },
+                { name: 'B.Pharm' },
+                { name: 'B.Sc. Nursing' },
+                { name: 'B.V.Sc' }
+              ] 
+            },
+            { 
+              name: 'Engineering & Technology',
+              children: [
+                { 
+                  name: 'B.Tech/BE',
+                  children: [
+                    { name: 'Computer Science Engineering' },
+                    { name: 'Electrical/Electronics Engineering' },
+                    { name: 'Civil Engineering' },
+                    { name: 'Mechanical Engineering' },
+                    { name: 'Chemical Engineering' }
+                  ] 
+                }
+              ]
+            },
+            { name: 'Biomedical Engineering' },
+          ] 
+        },
         { name: 'PCMC', children: [{ name: 'Engineering' }, { name: 'BCA' }] },
         { name: 'PCME', children: [{ name: 'Engineering' }] },
       ]
     },
     {
       name: 'Commerce',
-      children: [{ name: 'B.Com' }, { name: 'CA' }, { name: 'BBA' }]
+      children: [
+        { name: 'B.Com' }, 
+        { name: 'CA' }, 
+        { name: 'BBA' }
+      ]
     },
     {
       name: 'Arts',
-      children: [{ name: 'BA' }, { name: 'BFA' }, { name: 'BHM' }]
+      children: [
+        { name: 'BA' }, 
+        { name: 'BFA' }, 
+        { name: 'BHM' }
+      ]
     }
   ]
 };
@@ -32,21 +70,26 @@ const TreeVisualization = ({ isVisible },props) => {
       const svg = d3.select(svgRef.current);
       svg.selectAll('*').remove(); // Clear previous render
 
-      const width = 800;
-      const height =600;
+      const container = svgRef.current.parentElement;
+      const width = container.offsetWidth;
+      const height = container.offsetHeight;
+
       const margin = { top: 20, right: 90, bottom: 30, left: 90 };
+      const adjustedWidth = width - margin.left - margin.right;
+      const adjustedHeight = height - margin.top - margin.bottom;
+
       svg.attr('viewBox', `0 0 ${width} ${height}`)
-           .attr('preserveAspectRatio', 'xMidYMid meet');
+         .attr('preserveAspectRatio', 'xMidYMid meet');
 
-      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+      const g = svg.append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
 
-      const treeLayout = d3.tree().size([height - margin.top - margin.bottom, width - margin.left - margin.right]);
+      const treeLayout = d3.tree().size([adjustedHeight, adjustedWidth]);
 
-      // Prepare the root node and set initial positions
       const root = d3.hierarchy(treeData);
       root.x0 = height / 2;
       root.y0 = 0;
-      root.children.forEach(collapse); // Collapse the children of the root node
+      root.children.forEach(collapse);
 
       function collapse(d) {
         if (d.children) {
@@ -54,7 +97,7 @@ const TreeVisualization = ({ isVisible },props) => {
             d._children.forEach(collapse);
             d.children = null;
         }
-    }
+      }
 
       update(root);
 
@@ -65,7 +108,9 @@ const TreeVisualization = ({ isVisible },props) => {
         const nodes = treeData.descendants();
         const links = treeData.descendants().slice(1);
 
-        nodes.forEach(d => { d.y = d.depth * 180; });
+        // Dynamically adjust the distance between nodes based on the container size
+        nodes.forEach(d => { d.y = d.depth * (adjustedWidth / 5); });
+
         let i = 0;
 
         const node = g.selectAll('.node').data(nodes, d => d.id || (d.id = ++i));
@@ -87,14 +132,14 @@ const TreeVisualization = ({ isVisible },props) => {
         nodeEnter.append('circle')
           .attr('r', 1e-6)
           .style('fill', d => (d._children ? '#fd0' : '#0df'))
-          .style('cursor', 'pointer'); // Make cursor a pointer on hover
+          .style('cursor', 'pointer'); 
 
         nodeEnter.append('text')
-          .attr('dy', '.35em')
-          .attr('x', d => (d.children || d._children ? -13 : 13))
-          .attr('text-anchor', d => (d.children || d._children ? 'end' : 'start'))
+          .attr('dy', d => (d.children || d._children ? '-1.5rem' : '.35rem'))
+          .attr('x', d => (d.children || d._children ? 0 : 13))
+          .attr('text-anchor', d => (d.children || d._children ? 'middle' : 'start'))
           .text(d => d.data.name)
-          .style('cursor', 'pointer') // Pointer for text as well
+          .style('cursor', 'pointer')
           .attr('fill', 'currentColor');
 
         const nodeUpdate = nodeEnter.merge(node);
@@ -157,14 +202,21 @@ const TreeVisualization = ({ isVisible },props) => {
                   ${d.y} ${d.x}`;
       }
 
-      
+      // Add zooming and panning behavior
+      const zoom = d3.zoom()
+        .scaleExtent([0.5, 3])  // Adjust zoom scale limits as necessary
+        .on('zoom', (event) => {
+          g.attr('transform', event.transform);
+        });
+
+      svg.call(zoom);
     }
   }, [isVisible]);
 
   if (!isVisible) return null;
 
   return (
-      <svg ref={svgRef} className='h-full w-full' {...props}></svg>
+      <svg ref={svgRef} className='h-full w-full overflow-auto' {...props}></svg>
   );
 };
 
