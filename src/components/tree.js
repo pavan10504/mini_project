@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 
 // Tree data structure representing the Indian academic system
@@ -62,40 +62,59 @@ const treeData = {
   ]
 };
 
-const TreeVisualization = ({ isVisible },props) => {
+const TreeVisualization = ({ isVisible }, props) => {
   const svgRef = useRef(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  // Helper function to update dimensions based on container size
+  const updateDimensions = () => {
+    if (svgRef.current) {
+      const width = svgRef.current.clientWidth;
+      const height = svgRef.current.clientHeight;
+      setDimensions({ width, height });
+    }
+  };
 
   useEffect(() => {
-    if (isVisible && svgRef.current) {
+    // Set initial dimensions
+    updateDimensions();
+    
+    // Listen to window resize and update dimensions
+    window.addEventListener('resize', updateDimensions);
+    
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isVisible && svgRef.current && dimensions.width && dimensions.height) {
       const svg = d3.select(svgRef.current);
       svg.selectAll('*').remove(); // Clear previous render
 
-      const container = svgRef.current.parentElement;
-      const width = container.offsetWidth;
-      const height = container.offsetHeight;
-
       const margin = { top: 20, right: 90, bottom: 30, left: 90 };
-      const adjustedWidth = width - margin.left - margin.right;
-      const adjustedHeight = height - margin.top - margin.bottom;
+      const width = dimensions.width - margin.left - margin.right;
+      const height = dimensions.height - margin.top - margin.bottom;
 
-      svg.attr('viewBox', `0 0 ${width} ${height}`)
-         .attr('preserveAspectRatio', 'xMidYMid meet');
+      svg.attr('viewBox', `0 0 ${dimensions.width} ${dimensions.height}`)
+        .attr('preserveAspectRatio', 'xMidYMid meet');
 
-      const g = svg.append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
+      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
-      const treeLayout = d3.tree().size([adjustedHeight, adjustedWidth]);
+      const treeLayout = d3.tree().size([height, width]);
 
+      // Prepare the root node and set initial positions
       const root = d3.hierarchy(treeData);
       root.x0 = height / 2;
       root.y0 = 0;
-      root.children.forEach(collapse);
+      root.children.forEach(collapse); // Collapse the children of the root node
 
       function collapse(d) {
         if (d.children) {
-            d._children = d.children;
-            d._children.forEach(collapse);
-            d.children = null;
+          d._children = d.children;
+          d._children.forEach(collapse);
+          d.children = null;
         }
       }
 
@@ -108,9 +127,7 @@ const TreeVisualization = ({ isVisible },props) => {
         const nodes = treeData.descendants();
         const links = treeData.descendants().slice(1);
 
-        // Dynamically adjust the distance between nodes based on the container size
-        nodes.forEach(d => { d.y = d.depth * (adjustedWidth / 5); });
-
+        nodes.forEach(d => { d.y = d.depth * 180; });
         let i = 0;
 
         const node = g.selectAll('.node').data(nodes, d => d.id || (d.id = ++i));
@@ -132,14 +149,14 @@ const TreeVisualization = ({ isVisible },props) => {
         nodeEnter.append('circle')
           .attr('r', 1e-6)
           .style('fill', d => (d._children ? '#fd0' : '#0df'))
-          .style('cursor', 'pointer'); 
+          .style('cursor', 'pointer'); // Make cursor a pointer on hover
 
         nodeEnter.append('text')
-          .attr('dy', d => (d.children || d._children ? '-1.5rem' : '.35rem'))
-          .attr('x', d => (d.children || d._children ? 0 : 13))
+          .attr('dy', d => (d.children || d._children ? '-1.5rem': '.35em'))
+          .attr('x', d => (d.children || d._children ? -13 : 13))
           .attr('text-anchor', d => (d.children || d._children ? 'middle' : 'start'))
           .text(d => d.data.name)
-          .style('cursor', 'pointer')
+          .style('cursor', 'pointer') // Pointer for text as well
           .attr('fill', 'currentColor');
 
         const nodeUpdate = nodeEnter.merge(node);
@@ -193,6 +210,39 @@ const TreeVisualization = ({ isVisible },props) => {
           d.x0 = d.x;
           d.y0 = d.y;
         });
+        const zoom = d3.zoom()
+        .scaleExtent([0.5, 3])  // Adjust zoom scale limits as necessary
+        .on('zoom', (event) => {
+          g.attr('transform', event.transform);
+        });
+
+      svg.call(zoom);
+
+      // Function to calculate the bounding box and adjust zoom to fit tree
+      function fitToScreen(nodes) {
+        const bounds = {
+          left: d3.min(nodes, d => d.y)-50,
+          right: d3.max(nodes, d => d.y),
+          top: d3.min(nodes, d => d.x)-50,
+          bottom: d3.max(nodes, d => d.x),
+        };
+
+        const fullWidth = bounds.right - bounds.left+100;
+        const fullHeight = bounds.bottom - bounds.top+100;
+
+        const scale = Math.min(width / fullWidth, height / fullHeight);
+
+        const translateX = width / 2 - (bounds.left + fullWidth / 2) * scale;
+        const translateY = height / 2 - (bounds.top + fullHeight / 2) * scale;
+
+        svg.transition().duration(750).call(
+          zoom.transform,
+          d3.zoomIdentity.translate(translateX, translateY).scale(scale)
+        );
+      }
+
+        // Automatically adjust zoom to fit the tree in the screen
+        fitToScreen(nodes);
       }
 
       function diagonal(s, d) {
@@ -202,22 +252,12 @@ const TreeVisualization = ({ isVisible },props) => {
                   ${d.y} ${d.x}`;
       }
 
-      // Add zooming and panning behavior
-      const zoom = d3.zoom()
-        .scaleExtent([0.5, 3])  // Adjust zoom scale limits as necessary
-        .on('zoom', (event) => {
-          g.attr('transform', event.transform);
-        });
-
-      svg.call(zoom);
+      // Zoom and Pan functionality
+      
     }
-  }, [isVisible]);
+  }, [isVisible, dimensions]);
 
-  if (!isVisible) return null;
-
-  return (
-      <svg ref={svgRef} className='h-full w-full overflow-auto' {...props}></svg>
-  );
+  return <svg ref={svgRef} style={{ width: '100%', height: '100%' }} />;
 };
 
 export default TreeVisualization;
