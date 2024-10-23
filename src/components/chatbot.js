@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Plus, FolderTree} from 'lucide-react';
+import { Send, Plus, Route,BotMessageSquare} from 'lucide-react';
 import TreeVisualization from './tree.js';
 
 const Button = React.forwardRef(({ className, ...props }, ref) => {
@@ -79,8 +79,8 @@ const ChatbotLanding = ({ onToggleTree }) => {
       <Card className="w-full max-w-4xl h-[600px]  p-6 shadow-xl overflow-hidden flex flex-col">
         <div className="flex justify-between items-center mb-4">
           <Button onClick={handleTreeToggle} className="p-2">
-            <FolderTree className="h-4 w-4 mr-2" />
-            Toggle Tree
+            <Route className="h-4 w-4 mr-2" />
+            Goal Navigator
            </Button>
            {showTree&&(<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <Card className="w-3/4 h-3/4 p-6 overflow-auto">
@@ -88,9 +88,10 @@ const ChatbotLanding = ({ onToggleTree }) => {
           <Button onClick={handleTreeToggle} className="mt-4">Close</Button>
           </Card>
           </div>)}
-          
-           
-          <h1 className="text-2xl font-bold">Chatbot</h1>
+          <div className="text-2xl font-bold flex flex-row items-center justify-between ">
+          <h1 className="pr-2">Chatbot</h1>
+          <BotMessageSquare classname="h-4 w-3 mr-2"/>
+          </div>
         </div>
         {showInfoCard && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
