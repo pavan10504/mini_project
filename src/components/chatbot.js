@@ -90,7 +90,9 @@ const ChatbotLanding = ({ onToggleTree }) => {
           </div>)}
           <div className="text-2xl font-bold flex flex-row items-center justify-between ">
           <h1 className="pr-2">Chatbot</h1>
+          <svg width="1em" height="1em">
           <BotMessageSquare classname="h-4 w-3 mr-2"/>
+          </svg>
           </div>
         </div>
         {showInfoCard && (
@@ -118,17 +120,17 @@ const ChatbotLanding = ({ onToggleTree }) => {
             </Card>
           </div>
         )}
-        <div className="flex flex-col h-full">
-          <div className="flex-grow overflow-auto mb-4 space-y-4">
+        <div className="flex flex-col h-full overflow-hidden ">
+          <div className="flex-grow overflow-auto mb-4 mt-4 space-y-4 scrollbar-none">
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[70%] p-3 rounded-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>
+                <div className={`max-w-[70%] p-2 text-sm rounded-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>
                   {message.text}
                 </div>
               </div>
             ))}
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 mb-2">
             <Button onClick={handleExcelToggle} className="p-2">
               <Plus className="h-4 w-4" />
             </Button>
