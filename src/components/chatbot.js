@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Send, Plus, Route,BotMessageSquare} from 'lucide-react';
-import TreeVisualization from './tree.js';
+import AcademicTreeVisualization from './tree2.js';
 import StudentSelectionForm from './student.js';
 
 const Button = React.forwardRef(({ className, ...props }, ref) => {
@@ -49,20 +49,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const [studentData, setStudentData] = useState(null);
   const [subjectData, setSubjectData] = useState([]);
 
-  const getSubjectsForBoard = (board) => {
-    switch(board) {
-      case 'ICSE':
-        return ['Physics', 'Chemistry', 'Mathematics', 'English', 'Computer Science'];
-      case 'CBSE':
-        return ['Physics', 'Chemistry', 'Biology', 'Mathematics', 'English'];
-      case 'State Board':
-        return ['Physics', 'Chemistry', 'Mathematics', 'Language', 'Social Studies'];
-      case 'Engineering':
-        return ['Calculus', 'Programming', 'Electronics', 'Mechanics', 'Digital Systems'];
-      default:
-        return [];
-    }
-  };
+
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
@@ -84,11 +71,15 @@ const ChatbotLanding = ({ onToggleTree }) => {
   };
   const handleStudentFormSubmit = (data) => {
     setStudentData(data);
-    const subjects = getSubjectsForBoard(data.selectedBoard);
-    setSubjectData(subjects.map(subject => ({
+    setSubjectData(data.subjects.compulsory.map(subject => ({
       subject,
       score: ''
     })));
+    Object.entries(data.subjects.electives).forEach(([group, subjects]) => {
+      subjects.forEach(subject => {
+        setSubjectData(prev => [...prev, { subject, score: '' }]);
+      });
+    });
     setShowStudentForm(false);
     setShowInfoCard(false);
     setShowExcelSheet(true);
@@ -116,9 +107,9 @@ const ChatbotLanding = ({ onToggleTree }) => {
             Goal Navigator
            </Button>
            {showTree&&(<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <Card className="w-3/4 h-auto  p-6 overflow-hidden">
-          <TreeVisualization className="relative h-3/4" isVisible={showTree}/>
-          <Button onClick={handleTreeToggle} className="mt-4">Close</Button>
+          <Card className="w-3/4 h-[600px]  p-6  flex flex-col justify-center items-center overflow-auto">
+          <AcademicTreeVisualization className="relative" isVisible={showTree}/>
+          <Button onClick={handleTreeToggle} className="h-[50px] w-[50px] m-2">Close</Button>
           </Card>
           </div>)}
           <div className="text-2xl font-bold flex flex-row items-center justify-between ">

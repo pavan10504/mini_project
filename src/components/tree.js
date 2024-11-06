@@ -14,148 +14,36 @@ const treeData = {
         { 
           name: 'PCMB', 
           children: [
-            { 
-              name: 'Medicine Education',
-              children: [
-                { name: 'MBBS' },
-                { name: 'BDS' },
-                { name: 'BAMS'},
-                { name: 'BHMS'},
-                { name: 'BUMS'},
-                { name: 'B.V.Sc'},
-                { name: 'B.P.T'},
-                { name: 'B.O.T'},
-                { name: 'B.Pharm' },
-                { name: 'B.Sc. Nursing' },
-                { name: 'B.Sc. Radiology and Imaging Technology'},
-                { name: 'B.Sc. Medical Lab Technology'},
-                { name: 'B.Sc. Optometry'},
-                { name: 'B.Sc. Nutrition and Dietetics'},
-                { name: 'B.Sc. Forensic Science'},
-                { name: 'B.Sc. Cardiovascular Technology'},
-                { name: 'B.Sc. Anaesthesia Technology'}
-              ] 
+            {
             },
             { 
-              name: 'Engineering & Technology',
-              children: [
-                { 
-                  name: 'B.Tech/BE',
-                  children: [
-                    { name: 'Mechanical Engineering' },
-                    { name: 'Electrical Engineering' },
-                    { name: 'Civil Engineering' },
-                    { name: 'Computer Science Engineering' },
-                    { name: 'Artificial Intelligence and Machine Learning'},
-                    { name: 'Information Technology' },
-                    { nmae: 'Electronics and Communication Engineering'},
-                    { name: 'Biotechnology Engineering' },
-                    { name: 'Chemical Engineering' },
-                    { name: 'Aerospace Engineering' },
-                    { name: 'Environmental Engineering' },
-                    { name: 'Mechatronics Engineering' },
-                    { name: 'Marine Engineering' },
-                    { name: 'Petroleum Engineering' },
-                    { name: 'Robotics and Automation' },
-                    { name: 'Nanotechnology Engineering' }
-                  ] 
-                },
-                  {name:'B.Arch'},
-                  {name:'B.Plan'},
-                  {nmae:'BCA'}
-              ]
+              
             },
             { 
-              name: 'Science and Allied Education' ,
-              children:[
-                { name:'B.Sc.'},
-                { name:'B.Stat '},
-                { name:'B.Math'}
-              ]
+              
             },
           ] 
         },
         { name: 'PCMC', children: [{ name: 'Engineering Education',
           children:[
           { 
-            name:'B.Tech/B.E',
-            children:[
-              {name:'Mechanical Engineering'},
-              {name:'Civil Engineering'},
-              {name:'Electrical Engineering'},
-              {name:'Computer Science Engineering'},
-              {name:'Electronics and Communication Engineering'},
-              {name:'Information Technology Engineering'},
-              {name:'Electronics and Instrumentation Engineering'},
-              {name:'Mechatronics Engineering'},
-              {name:'Artificial Intelligence and Machine Learning'},
-              {name:'Robotics Engineering'},
-              {name:'Automation Engineering'},
-              {name:'Software Engineering'},
-              {name:'Aerospace Engineering'},
-              {name:'Biotechnology Engineering'},
-              {name:'Chemical Engineering'},
-              {name:'Environmental Engineering'},
-              {name:'Data Science Engineering'}
-            ]
+            
           }     
           ]
          },
-         { name: 'Information Technology (IT) Education',
-          children:[
-            {name:'BCA ',
-              children:[{
-              name:'B.Sc',
-              children:[
-                {name:'Computer Science'},
-                {name:'Information Technology'},
-                {name:'Data Science'},
-                {name:'Software Engineering'},
-                {name:'Cybersecurity'}
-              ]
-            }
-          ]}]
+         { 
           }
         ] },
          { name: 'PCME', children: [{ name: 'Engineering Education',
           children:[
           { 
-            name:'B.Tech/B.E',
-            children:[
-              {name:'Mechanical Engineering'},
-              {name:'Civil Engineering'},
-              {name:'Electrical Engineering'},
-              {name:'Computer Science Engineering'},
-              {name:'Electronics and Communication Engineering'},
-              {name:'Information Technology Engineering'},
-              {name:'Electronics and Instrumentation Engineering'},
-              {name:'Mechatronics Engineering'},
-              {name:'Artificial Intelligence and Machine Learning'},
-              {name:'Robotics Engineering'},
-              {name:'Automation Engineering'},
-              {name:'Software Engineering'},
-              {name:'Aerospace Engineering'},
-              {name:'Biotechnology Engineering'},
-              {name:'Chemical Engineering'},
-              {name:'Environmental Engineering'},
-              {name:'Data Science Engineering'}
-            ]
+            
           }     
           ]
          },
          { name: 'Information Technology (IT) Education',
           children:[
-            {name:'BCA ',children:[{
-              name:'B.Sc',
-              children:[
-                {name:'Computer Science'},
-                {name:'Information Technology'},
-                {name:'Data Science'},
-                {name:'Software Engineering'},
-                {name:'Cybersecurity'}
-              ]
-            }
-          ]
+            {
           }
         ] },
     
