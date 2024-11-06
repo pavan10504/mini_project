@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Send, Plus, Route,BotMessageSquare} from 'lucide-react';
 import TreeVisualization from './tree.js';
+import StudentSelectionForm from './student.js';
 
 const Button = React.forwardRef(({ className, ...props }, ref) => {
   return (
@@ -44,6 +45,24 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const [userInfo, setUserInfo] = useState({ name: '', age: '' });
   const [showExcelSheet, setShowExcelSheet] = useState(false);
   const [showTree, setShowTree] = useState(false);
+  const [showStudentForm, setShowStudentForm] = useState(false);
+  const [studentData, setStudentData] = useState(null);
+  const [subjectData, setSubjectData] = useState([]);
+
+  const getSubjectsForBoard = (board) => {
+    switch(board) {
+      case 'ICSE':
+        return ['Physics', 'Chemistry', 'Mathematics', 'English', 'Computer Science'];
+      case 'CBSE':
+        return ['Physics', 'Chemistry', 'Biology', 'Mathematics', 'English'];
+      case 'State Board':
+        return ['Physics', 'Chemistry', 'Mathematics', 'Language', 'Social Studies'];
+      case 'Engineering':
+        return ['Calculus', 'Programming', 'Electronics', 'Mechanics', 'Digital Systems'];
+      default:
+        return [];
+    }
+  };
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
@@ -55,10 +74,24 @@ const ChatbotLanding = ({ onToggleTree }) => {
       setInputMessage('');
     }
   };
-
   const handleInfoSubmit = (e) => {
     e.preventDefault();
+    if (parseInt(userInfo.age) >= 16) {
+      setShowStudentForm(true);
+    } else {
+      setShowInfoCard(false);
+    }
+  };
+  const handleStudentFormSubmit = (data) => {
+    setStudentData(data);
+    const subjects = getSubjectsForBoard(data.selectedBoard);
+    setSubjectData(subjects.map(subject => ({
+      subject,
+      score: ''
+    })));
+    setShowStudentForm(false);
     setShowInfoCard(false);
+    setShowExcelSheet(true);
   };
 
   const handleExcelToggle = () => {
@@ -83,8 +116,8 @@ const ChatbotLanding = ({ onToggleTree }) => {
             Goal Navigator
            </Button>
            {showTree&&(<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <Card className="w-3/4 h-3/4 p-6 overflow-auto">
-          <TreeVisualization className="relative " isVisible={showTree}/>
+          <Card className="w-3/4 h-auto  p-6 overflow-hidden">
+          <TreeVisualization className="relative h-3/4" isVisible={showTree}/>
           <Button onClick={handleTreeToggle} className="mt-4">Close</Button>
           </Card>
           </div>)}
@@ -98,25 +131,34 @@ const ChatbotLanding = ({ onToggleTree }) => {
         {showInfoCard && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
             <Card className="w-96 p-6">
-              <h2 className="text-2xl font-bold mb-4">Welcome!</h2>
-              <form onSubmit={handleInfoSubmit}>
-                <Input
-                  className="mb-4"
-                  placeholder="Name"
-                  value={userInfo.name}
-                  onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
-                  required
-                />
-                <Input
-                  className="mb-4"
-                  placeholder="Age"
-                  type="number"
-                  value={userInfo.age}
-                  onChange={(e) => setUserInfo({ ...userInfo, age: e.target.value })}
-                  required
-                />
-                <Button type="submit" className="w-full">Start Chatting</Button>
-              </form>
+              {!showStudentForm ? (
+                <>
+                  <h2 className="text-2xl font-bold mb-4">Welcome!</h2>
+                  <form onSubmit={handleInfoSubmit}>
+                    <Input
+                      className="mb-4"
+                      placeholder="Name"
+                      value={userInfo.name}
+                      onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
+                      required
+                    />
+                    <Input
+                      className="mb-4"
+                      placeholder="Age"
+                      type="number"
+                      value={userInfo.age}
+                      onChange={(e) => setUserInfo({ ...userInfo, age: e.target.value })}
+                      required
+                    />
+                    <Button type="submit" className="w-full">Continue</Button>
+                  </form>
+                </>
+              ) : (
+                <div className="p-4">
+                  <h2 className="text-xl font-bold mb-4">Student Information</h2>
+                  <StudentSelectionForm onSubmit={handleStudentFormSubmit} userinfon={userInfo.name} userinfoa={userInfo.age}/>
+                </div>
+              )}
             </Card>
           </div>
         )}
@@ -146,35 +188,49 @@ const ChatbotLanding = ({ onToggleTree }) => {
           </div>
         </div>
       </Card>
-      {showExcelSheet && (
+      {showExcelSheet && studentData && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <Card className="w-3/4 h-3/4 p-6 overflow-auto">
-            <h2 className="text-2xl font-bold mb-4">Excel Sheet</h2>
-            <table className="w-full border-collapse">
+          <Card className="min-w-0 min-h-0 p-6 overflow-auto">
+            <h2 className="text-2xl font-bold mb-4">Student Performance Sheet</h2>
+            <div className="mb-4 flex flex-col items-center justify-center p-2 gap-2">
+              <p><strong>Name:</strong> {userInfo.name}</p>
+              <p><strong>Age:</strong> {userInfo.age}</p>
+              <p><strong>Board:</strong> {studentData.selectedBoard}</p>
+            </div>
+            <table className="w-4/4 border-collapse  flex items-center justify-center left-1/2">
+            <div className="left-1/2">
               <thead>
                 <tr>
-                  <th className="border p-2">Column 1</th>
-                  <th className="border p-2">Column 2</th>
-                  <th className="border p-2">Column 3</th>
+                  <th className="border p-2">Subject</th>
+                  <th className="border p-2">Score</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="border p-2">Predetermined 1</td>
-                  <td className="border p-2">Predetermined 2</td>
-                  <td className="border p-2">Predetermined 3</td>
-                </tr>
-                <tr>
-                  <td className="border p-2"><Input placeholder="Enter value" /></td>
-                  <td className="border p-2"><Input placeholder="Enter value" /></td>
-                  <td className="border p-2"><Input placeholder="Enter value" /></td>
-                </tr>
+                {subjectData.map((subject, index) => (
+                  <tr key={index}>
+                    <td className="border p-2 w-1/4">{subject.subject}</td>
+                    <td className="border p-2 w-1/4">
+                      <Input 
+                        placeholder="Enter score"
+                        type="number"
+                        value={subject.score}
+                        onChange={(e) => {
+                          const newSubjectData = [...subjectData];
+                          newSubjectData[index].score = e.target.value;
+                          setSubjectData(newSubjectData);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))}
               </tbody>
+              </div>
             </table>
             <Button onClick={handleExcelToggle} className="mt-4">Close</Button>
           </Card>
         </div>
       )}
+
     </div>
   );
 };
