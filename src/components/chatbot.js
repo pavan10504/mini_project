@@ -116,7 +116,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
             Goal Navigator
            </Button>
            {showTree&&(<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <Card className="w-3/4 h-auto  p-6 overflow-hidden">
+          <Card className="w-3/4 h-[600px]  p-6 overflow-hidden">
           <TreeVisualization className="relative h-3/4" isVisible={showTree}/>
           <Button onClick={handleTreeToggle} className="mt-4">Close</Button>
           </Card>
