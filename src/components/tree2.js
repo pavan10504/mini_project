@@ -1,6 +1,5 @@
 ﻿import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import CollapsibleTree from 'react-collapsible-tree';
 
 // Tree data structure representing the Indian academic system
 const treeData = {
