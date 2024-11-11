@@ -76,6 +76,7 @@ const StudentSelectionForm = ({ onSubmit, userinfon, userinfoa }) => {
     "State Board": {compulsory: [
       "Language 1 ",
       "Language 2 ",
+      "Language 3 ",
       "Social Science ",
       "Mathematics",
       "Science"

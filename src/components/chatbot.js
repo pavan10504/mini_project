@@ -108,7 +108,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
            </Button>
            {showTree&&(<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <Card className="w-3/4 h-[600px]  p-6  flex flex-col justify-center items-center overflow-auto">
-          <AcademicTreeVisualization className="relative" isVisible={showTree}/>
+          <AcademicTreeVisualization className="relative w-full" isVisible={showTree}/>
           <Button onClick={handleTreeToggle} className="h-[50px] w-[50px] m-2">Close</Button>
           </Card>
           </div>)}
