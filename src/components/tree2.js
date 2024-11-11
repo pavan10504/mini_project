@@ -332,7 +332,7 @@ const AcademicTreeVisualization = () => {
             <AcademicNodeCard key={index} node={child} onClick={handleNodeClick} />
           ))}
           {getPagedChildren.length === 0 && (
-            <p className="text-center text-gray-500">End of Tree</p>
+            <p className="text-center text-gray-500">En of Tree</p>
           )}
         </div>
 
