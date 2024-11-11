@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Search,ChevronsRight, MoveRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, MoveRight } from 'lucide-react';
 
 const treeData = {
   name: '10th',
@@ -332,7 +332,7 @@ const AcademicTreeVisualization = () => {
             <AcademicNodeCard key={index} node={child} onClick={handleNodeClick} />
           ))}
           {getPagedChildren.length === 0 && (
-            <p className="text-center text-gray-500">En of Tree</p>
+            <p className="text-center text-gray-500">End of Tree</p>
           )}
         </div>
 
