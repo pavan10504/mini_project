@@ -3,15 +3,15 @@ import { ChevronLeft, ChevronRight, Search, MoveRight } from 'lucide-react';
 
 const treeData = {
   Name:'10th',
-  Children :[
+  children :[
       {Name:'PUC',
-          Children:[
+          children:[
               {Name:'SCIENCE',
-                  Children:[
+                  children:[
                       {Name:'PCMB',
-                          Children:[
+                          children:[
                               {Name:'Medical and Health Sciences',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Medicine and Bachelor of Surgery(MBBS)'},
                                       {Name:'Bachelor of Dental Surgery(BDS)'},
                                       {Name:'Bachelor of Ayurvedic Medicine and Surgery(BAMS)'},
@@ -55,7 +55,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Biological Sciences and Agriculture',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Sc. Biotechnology'},
                                       {Name:'B.Sc. Microbiology'},
                                       {Name:'B.Sc. Genetics'},
@@ -88,7 +88,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Engineering and Technology',
-                                  Children:[
+                                  children:[
                                       {Name:'Mechanical Engineering'},
                                       {Name:'Civil Engineering'},
                                       {Name:'Electrical Engineering'},
@@ -139,7 +139,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Pure Sciences',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Sc. Physics'},
                                       {Name:'B.Sc. Chemistry'},
                                       {Name:'B.Sc. Mathematics'},
@@ -155,7 +155,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Commerce and Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Commerce(B.Com)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
@@ -163,7 +163,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Information Technology and Computer Applications',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Computer Applications(BCA)'},
                                       {Name:'B.Sc. Computer Science'},
                                       {Name:'B.Sc. in Information Technology'},
@@ -173,7 +173,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Architecture and Design',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Architecture(B.Arch)'},
                                       {Name:'Bachelor of Design(B.Des)'},
                                       {Name:'Bachelor of Planning(B.Plan)'},
@@ -182,7 +182,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Social Sciences and Humanities',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychlogy'},
                                       {Name:'BA Sociology'},
                                       {Name:'BA Economics'},
@@ -195,27 +195,27 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Law(LLB)'},
                                       {Name:'BA LLB,BBA LLB,B.Com.LLB,B.Sc.LLB(Integrated)'}
                                   ]
                               },
                               {Name:'Education and Physical Education',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Education(B.Ed)'},
                                       {Name:'Bachelor of Physical Education(B.P.Ed)'},
                                       {Name:'B.Sc in Physical Education,Health Education and Sports Sciences'}
                                   ]
                               },
                               {Name:'Aviation',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Sc.Aviation'},
                                       {Name:'Commercial Pilot License(CPL)'},
                                       {Name:'Aircraft Maintenance Engineering(AME)'}
                                   ]
                               },
                               {Name:'Hotel Management and Hospitality',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management(BHM)'},
                                       {Name:'B.Sc in Hospitality and Hotel Administration'},
                                       {Name:'Bachelor of catering and Culinary Arts(BCTCA)'}
@@ -224,9 +224,9 @@ const treeData = {
                           ]
                       },
                       {Name:'PCMC',
-                          Children:[
+                          children:[
                               {Name:'Engineering and Technology(B.Tech / B.E.)',
-                                  Children:[
+                                  children:[
                                       {Name:'Mechanical Engineering'},
                                       {Name:'Civil Engineering'},
                                       {Name:'Electrical Engineering'},
@@ -272,7 +272,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Computer Applications and Information Technology',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Computer Applications(BCA)'},
                                       {Name:'B.Sc. Computer Science'},
                                       {Name:'B.Sc. in Information Technology'},
@@ -284,7 +284,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Pure Sciences',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Sc. Physics'},
                                       {Name:'B.Sc. Chemistry'},
                                       {Name:'B.Sc. Mathematics'},
@@ -300,7 +300,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Commerce and Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Commerce(B.Com)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
@@ -308,7 +308,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Social Sciences and Humanities',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychlogy'},
                                       {Name:'BA Sociology'},
                                       {Name:'BA Economics'},
@@ -321,13 +321,13 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Law(LLB)'},
                                       {Name:'BA LLB,BBA LLB,B.Com.LLB,B.Sc.LLB(Integrated)'}
                                   ]
                               },
                               {Name:'Architecture and Design',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Architecture(B.Arch)'},
                                       {Name:'Bachelor of Design(B.Des)'},
                                       {Name:'Bachelor of Planning(B.Plan)'},
@@ -336,14 +336,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Aviation',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Sc.Aviation'},
                                       {Name:'Commercial Pilot License(CPL)'},
                                       {Name:'Aircraft Maintenance Engineering(AME)'}
                                   ]
                               },
                               {Name:'Hotel Management and Hospitality',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management(BHM)'},
                                       {Name:'B.Sc in Hospitality and Hotel Administration'},
                                       {Name:'Bachelor of catering and Culinary Arts(BCTCA)'}
@@ -352,9 +352,9 @@ const treeData = {
                           ]
                       },
                       {Name:'PCME',
-                          Children:[
+                          children:[
                               {Name:'Engineering and Technology(B.Tech / B.E.)',
-                                  Children:[
+                                  children:[
                                       {Name:'Mechanical Engineering'},
                                       {Name:'Civil Engineering'},
                                       {Name:'Electrical Engineering'},
@@ -400,7 +400,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Computer Applications and Information Technology',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Computer Applications(BCA)'},
                                       {Name:'B.Sc. Computer Science'},
                                       {Name:'B.Sc. in Information Technology'},
@@ -412,7 +412,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Pure Sciences',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Sc. Physics'},
                                       {Name:'B.Sc. Chemistry'},
                                       {Name:'B.Sc. Mathematics'},
@@ -428,7 +428,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Commerce and Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Commerce(B.Com)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
@@ -436,7 +436,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Social Sciences and Humanities',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychlogy'},
                                       {Name:'BA Sociology'},
                                       {Name:'BA Economics'},
@@ -449,13 +449,13 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Law(LLB)'},
                                       {Name:'BA LLB,BBA LLB,B.Com.LLB,B.Sc.LLB(Integrated)'}
                                   ]
                               },
                               {Name:'Architecture and Design',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Architecture(B.Arch)'},
                                       {Name:'Bachelor of Design(B.Des)'},
                                       {Name:'Bachelor of Planning(B.Plan)'},
@@ -464,14 +464,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Aviation',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Sc.Aviation'},
                                       {Name:'Commercial Pilot License(CPL)'},
                                       {Name:'Aircraft Maintenance Engineering(AME)'}
                                   ]
                               },
                               {Name:'Hotel Management and Hospitality',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management(BHM)'},
                                       {Name:'B.Sc in Hospitality and Hotel Administration'},
                                       {Name:'Bachelor of catering and Culinary Arts(BCTCA)'}
@@ -482,11 +482,11 @@ const treeData = {
                   ]
               },
               {Name:'COMMERCE',
-                  Children:[
+                  children:[
                       {Name:'ABMS',
-                          Children:[
+                          children:[
                               {Name:'Commerce and Management Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Commerce(B.Com)'},
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
@@ -498,7 +498,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Chartered and Professional Courses',
-                                  Children:[
+                                  children:[
                                       {Name:'Chartered Accountancy (CA)'},
                                       {Name:'Company Secretary (CS)'},
                                       {Name:'Cost and Management Accountancy (CMA)'},
@@ -513,7 +513,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Economics and Statistics',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Economics'},
                                       {Name:'B.Sc. Economics'},
                                       {Name:'BA Business Economics'},
@@ -526,14 +526,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Com. LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'BA LLB'}
                                   ]
                               },
                               {Name:'Finance and Banking',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Finance and Investment Analysis (BFIA)'},
                                       {Name:'B.Com. in Financial Markets'},
                                       {Name:'B.Com. in Financial Management'},
@@ -546,21 +546,21 @@ const treeData = {
                                   ]
                               },
                               {Name:'Hospitality and Hotel Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management(BHM)'},
                                       {Name:'Bachelor of Hospitality and Catering Technology'},
                                       {Name:'Bachelor of Tourism and Travel Management'}
                                   ]
                               },
                               {Name:'Computer Applications and Information Technology',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Computer Applications(BCA)'},
                                       {Name:'Information Technology(B.Sc. IT )'},
                                       {Name:'B.Sc. Computer Science'}
                                   ]
                               },
                               {Name:'Social Sciences and Humanities',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'BA Sociology'},
                                       {Name:'BA Political Science'},
@@ -569,7 +569,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Design and Media',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Mass Media (BMM)'},
@@ -579,9 +579,9 @@ const treeData = {
                           ]
                       },
                       {Name:'ABSCs',
-                          Children:[
+                          children:[
                               {Name:'Commerce and Management Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Commerce(B.Com)'},
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
@@ -593,7 +593,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Chartered and Professional Courses',
-                                  Children:[
+                                  children:[
                                       {Name:'Chartered Accountancy (CA)'},
                                       {Name:'Company Secretary (CS)'},
                                       {Name:'Cost and Management Accountancy (CMA)'},
@@ -608,7 +608,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Economics and Statistics',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Economics'},
                                       {Name:'B.Sc. Economics'},
                                       {Name:'BA Business Economics'},
@@ -621,14 +621,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Com. LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'BA LLB'}
                                   ]
                               },
                               {Name:'Finance and Banking',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Finance and Investment Analysis (BFIA)'},
                                       {Name:'B.Com. in Financial Markets'},
                                       {Name:'B.Com. in Financial Management'},
@@ -641,14 +641,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Hospitality and Hotel Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management(BHM)'},
                                       {Name:'Bachelor of Hospitality and Catering Technology'},
                                       {Name:'Bachelor of Tourism and Travel Management'}
                                   ]
                               },
                               {Name:'Computer Applications and Information Technology',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Computer Applications(BCA)'},
                                       {Name:'Information Technology(B.Sc. IT )'},
                                       {Name:'B.Sc. Computer Science'},
@@ -656,7 +656,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Social Sciences and Humanities',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'BA Sociology'},
                                       {Name:'BA Political Science'},
@@ -665,7 +665,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Design and Media',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Mass Media (BMM)'},
@@ -675,9 +675,9 @@ const treeData = {
                           ]
                       },
                       {Name:'CEBA',
-                          Children:[
+                          children:[
                               {Name:'Commerce and Management Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Commerce(B.Com)'},
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
@@ -689,7 +689,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Chartered and Professional Courses',
-                                  Children:[
+                                  children:[
                                       {Name:'Chartered Accountancy (CA)'},
                                       {Name:'Company Secretary (CS)'},
                                       {Name:'Cost and Management Accountancy (CMA)'},
@@ -704,7 +704,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Economics and Statistics',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Economics'},
                                       {Name:'B.Sc. Economics'},
                                       {Name:'BA Business Economics'},
@@ -717,14 +717,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Com. LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'BA LLB'}
                                   ]
                               },
                               {Name:'Finance and Banking',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Finance and Investment Analysis (BFIA)'},
                                       {Name:'B.Com. in Financial Markets'},
                                       {Name:'B.Com. in Financial Management'},
@@ -737,21 +737,21 @@ const treeData = {
                                   ]
                               },
                               {Name:'Hospitality and Hotel Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management(BHM)'},
                                       {Name:'Bachelor of Hospitality and Catering Technology'},
                                       {Name:'Bachelor of Tourism and Travel Management'}
                                   ]
                               },
                               {Name:'Computer Applications and Information Technology',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Computer Applications(BCA)'},
                                       {Name:'Information Technology(B.Sc. IT )'},
                                       {Name:'B.Sc. Computer Science'}
                                   ]
                               },
                               {Name:'Social Sciences and Humanities',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'BA Sociology'},
                                       {Name:'BA Political Science'},
@@ -760,7 +760,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Design and Media',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Mass Media (BMM)'},
@@ -770,9 +770,9 @@ const treeData = {
                           ]
                       },
                       {Name:'SEBA',
-                          Children:[
+                          children:[
                               {Name:'Commerce and Management Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Commerce(B.Com)'},
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
@@ -784,7 +784,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Chartered and Professional Courses',
-                                  Children:[
+                                  children:[
                                       {Name:'Chartered Accountancy (CA)'},
                                       {Name:'Company Secretary (CS)'},
                                       {Name:'Cost and Management Accountancy (CMA)'},
@@ -799,7 +799,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Economics and Statistics',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Economics'},
                                       {Name:'B.Sc. Economics'},
                                       {Name:'BA Business Economics'},
@@ -812,14 +812,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Com. LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'BA LLB'}
                                   ]
                               },
                               {Name:'Finance and Banking',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Finance and Investment Analysis (BFIA)'},
                                       {Name:'B.Com. in Financial Markets'},
                                       {Name:'B.Com. in Financial Management'},
@@ -832,21 +832,21 @@ const treeData = {
                                   ]
                               },
                               {Name:'Hospitality and Hotel Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management(BHM)'},
                                       {Name:'Bachelor of Hospitality and Catering Technology'},
                                       {Name:'Bachelor of Tourism and Travel Management'}
                                   ]
                               },
                               {Name:'Computer Applications and Information Technology',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Computer Applications(BCA)'},
                                       {Name:'Information Technology(B.Sc. IT )'},
                                       {Name:'B.Sc. Computer Science'}
                                   ]
                               },
                               {Name:'Social Sciences and Humanities',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'BA Sociology'},
                                       {Name:'BA Political Science'},
@@ -855,7 +855,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Design and Media',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Mass Media (BMM)'},
@@ -865,9 +865,9 @@ const treeData = {
                           ]
                       },
                       {Name:'MEBA',
-                          Children:[
+                          children:[
                               {Name:'Commerce and Management Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Commerce(B.Com)'},
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
@@ -879,7 +879,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Chartered and Professional Courses',
-                                  Children:[
+                                  children:[
                                       {Name:'Chartered Accountancy (CA)'},
                                       {Name:'Company Secretary (CS)'},
                                       {Name:'Cost and Management Accountancy (CMA)'},
@@ -894,7 +894,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Economics and Statistics',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Economics'},
                                       {Name:'B.Sc. Economics'},
                                       {Name:'BA Business Economics'},
@@ -907,14 +907,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'B.Com. LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'BA LLB'}
                                   ]
                               },
                               {Name:'Finance and Banking',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Finance and Investment Analysis (BFIA)'},
                                       {Name:'B.Com. in Financial Markets'},
                                       {Name:'B.Com. in Financial Management'},
@@ -927,21 +927,21 @@ const treeData = {
                                   ]
                               },
                               {Name:'Hospitality and Hotel Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management(BHM)'},
                                       {Name:'Bachelor of Hospitality and Catering Technology'},
                                       {Name:'Bachelor of Tourism and Travel Management'}
                                   ]
                               },
                               {Name:'Computer Applications and Information Technology',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Computer Applications(BCA)'},
                                       {Name:'Information Technology(B.Sc. IT )'},
                                       {Name:'B.Sc. Computer Science'}
                                   ]
                               },
                               {Name:'Social Sciences and Humanities',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'BA Sociology'},
                                       {Name:'BA Political Science'},
@@ -950,7 +950,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Design and Media',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Mass Media (BMM)'},
@@ -962,17 +962,17 @@ const treeData = {
                   ]
               },
               {Name:'ARTS',
-                  Children:[
+                  children:[
                       {Name:'HEPS',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -980,7 +980,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -994,7 +994,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1006,7 +1006,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1018,7 +1018,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1027,7 +1027,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1040,7 +1040,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1054,14 +1054,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -1073,15 +1073,15 @@ const treeData = {
                           ]
                       },
                       {Name:'HEPPSy',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -1089,7 +1089,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -1103,7 +1103,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1115,7 +1115,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1127,7 +1127,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1136,7 +1136,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1149,7 +1149,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1163,14 +1163,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -1182,15 +1182,15 @@ const treeData = {
                           ]
                       },
                       {Name:'HEG',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -1198,7 +1198,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -1212,7 +1212,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1224,7 +1224,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1236,7 +1236,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1245,7 +1245,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1258,7 +1258,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1272,14 +1272,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -1291,15 +1291,15 @@ const treeData = {
                           ]
                       },
                       {Name:'HEK',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Language and Literature',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Kannada'},
                                       {Name:'BA in Language and Literature'},
                                       {Name:'BA in Comparative Literature'},
@@ -1309,7 +1309,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -1317,7 +1317,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -1331,7 +1331,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1343,7 +1343,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1355,7 +1355,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1364,7 +1364,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1377,7 +1377,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1391,14 +1391,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -1410,15 +1410,15 @@ const treeData = {
                           ]
                       },
                       {Name:'HSK',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Language and Literature',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Kannada'},
                                       {Name:'BA in Language and Literature'},
                                       {Name:'BA in Comparative Literature'},
@@ -1428,7 +1428,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -1436,7 +1436,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -1450,7 +1450,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1462,7 +1462,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1474,7 +1474,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1483,7 +1483,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1496,7 +1496,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1510,14 +1510,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -1529,15 +1529,15 @@ const treeData = {
                           ]
                       },
                       {Name:'SHPS',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Language and Literature',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Kannada'},
                                       {Name:'BA in Language and Literature'},
                                       {Name:'BA in Comparative Literature'},
@@ -1547,7 +1547,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -1555,7 +1555,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -1569,7 +1569,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1581,7 +1581,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1593,7 +1593,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1602,7 +1602,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1615,7 +1615,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1629,14 +1629,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -1648,15 +1648,15 @@ const treeData = {
                           ]
                       },
                       {Name:'HSPSy',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Language and Literature',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Kannada'},
                                       {Name:'BA in Language and Literature'},
                                       {Name:'BA in Comparative Literature'},
@@ -1666,7 +1666,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -1674,7 +1674,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -1688,7 +1688,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1700,7 +1700,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1712,7 +1712,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1721,7 +1721,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1734,7 +1734,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1748,14 +1748,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -1767,15 +1767,15 @@ const treeData = {
                           ]
                       },
                       {Name:'GEPSy',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Language and Literature',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Kannada'},
                                       {Name:'BA in Language and Literature'},
                                       {Name:'BA in Comparative Literature'},
@@ -1785,7 +1785,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -1793,7 +1793,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -1807,7 +1807,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1819,7 +1819,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1831,7 +1831,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1840,7 +1840,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1853,7 +1853,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1867,14 +1867,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -1886,15 +1886,15 @@ const treeData = {
                           ]
                       },
                       {Name:'HPE',
-                          Children:[
+                          children:[
                               {Name:'Social Sciences and Humanities Degrees',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Arts(BA)'},
                                       {Name:'Bachelor of Social Work(BSW)'}
                                   ]
                               },
                               {Name:'Language and Literature',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Kannada'},
                                       {Name:'BA in Language and Literature'},
                                       {Name:'BA in Comparative Literature'},
@@ -1904,7 +1904,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Law',
-                                  Children:[
+                                  children:[
                                       {Name:'BA LLB'},
                                       {Name:'BBA LLB'},
                                       {Name:'B.Com. LLB'},
@@ -1912,7 +1912,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Journalism, Media, and Communication',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Mass Media (BMM)'},
                                       {Name:'BA Journalism'},
                                       {Name:'BA in Communication and Media'},
@@ -1926,7 +1926,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Management and Commerce',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Business Administration(BBA)'},
                                       {Name:'Bachelor of Management Studies(BMS)'},
                                       {Name:'Bachelor of Business Management(BBM)'},
@@ -1938,7 +1938,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Psychology and Counselling',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Psychology'},
                                       {Name:'Bachelor of Counselling and Psychology'},
                                       {Name:'B.Sc. Psychology'},
@@ -1950,7 +1950,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Fine Arts, Design, and Performing Arts',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Fine Arts (BFA)'},
                                       {Name:'Bachelor of Design (B.Des.)'},
                                       {Name:'Bachelor of Performing Arts (BPA)'},
@@ -1959,7 +1959,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Public Policy, Governance, and Development Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA Public Policy'},
                                       {Name:'BA Governance and Public Administration'},
                                       {Name:'Bachelor of Development Studies'},
@@ -1972,7 +1972,7 @@ const treeData = {
                                   ]
                               },
                               {Name:'Tourism, Hospitality, and Event Management',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Hotel Management (BHM)'},
                                       {Name:'Bachelor of Tourism and Travel Management(BTTM)'},
                                       {Name:'Bachelor of Event Management'},
@@ -1986,14 +1986,14 @@ const treeData = {
                                   ]
                               },
                               {Name:'Library and Information Science',
-                                  Children:[
+                                  children:[
                                       {Name:'Bachelor of Library Science (B.Lib.Sc.)'},
                                       {Name:'Bachelor of Library and Information Science (B.L.I.Sc.)'},
                                       {Name:'BA in Library Science and Information Management'}
                                   ]
                               },
                               {Name:'Rural and Gender Studies',
-                                  Children:[
+                                  children:[
                                       {Name:'BA in Rural Development'},
                                       {Name:'BA in Gender Studies'},
                                       {Name:'BA in Rural Studies'},
@@ -2009,9 +2009,9 @@ const treeData = {
           ]
       },
       {Name:'DIPLOMO',
-          Children:[
+          children:[
               {Name:'Engineering Diploma Courses',
-                  Children:[
+                  children:[
                       {Name:'Diploma in Civil Engineering'},
                       {Name:'Diploma in Mechanical Engineering'},
                       {Name:'Diploma in Electrical Engineering'},
@@ -2033,7 +2033,7 @@ const treeData = {
                   ]
               },
               {Name:'Non-Engineering Diploma Courses',
-                  Children:[
+                  children:[
                       {Name:'Diploma in Fashion Design'},
                       {Name:'Diploma in Interior Design'},
                       {Name:'Diploma in Hotel Management'},
@@ -2056,7 +2056,7 @@ const treeData = {
                   ]
               },
               {Name:'Medical and Paramedical Diploma Courses',
-                  Children:[
+                  children:[
                       {Name:'Diploma in Nursing'},
                       {Name:'Diploma in Pharmacy'},
                       {Name:'Diploma in Medical Laboratory Technology (DMLT)'},
@@ -2074,7 +2074,7 @@ const treeData = {
                   ]
               },
               {Name:'Art & Design Diploma Courses',
-                  Children:[
+                  children:[
                       {Name:'Diploma in Fine Arts'},
                       {Name:'Diploma in Animation'},
                       {Name:'Diploma in Graphic Design'},
@@ -2087,7 +2087,7 @@ const treeData = {
                   ]
               },
               {Name:'Vocational and Skill-based Diploma Courses',
-                  Children:[
+                  children:[
                       {Name:'Diploma in Welding Technology'},
                       {Name:'Diploma in Air Conditioning & Refrigeration'},
                       {Name:'Diploma in Electrical Installation & Maintenance'},
@@ -2103,7 +2103,7 @@ const treeData = {
                   ]
               },
               {Name:'Specialized Diploma Courses',
-                  Children:[
+                  children:[
                       {Name:'Diploma in Film Making'},
                       {Name:'Diploma in Media Studies'},
                       {Name:'Diploma in Software Engineering'},
@@ -2118,9 +2118,9 @@ const treeData = {
           ]
       },
       {Name:'ITI',
-          Children:[
+          children:[
               {Name:'Engineering Trades',
-                  Children:[
+                  children:[
                       {Name:'ITI in Electrician'},
                       {Name:'ITI in Fitter'},
                       {Name:'ITI in Turner'},
@@ -2159,7 +2159,7 @@ const treeData = {
                   ]
               },
               {Name:'Non-Engineering Trades',
-                  Children:[
+                  children:[
                       {Name:'ITI in Stenographer & Secretarial Assistant (English)'},
                       {Name:'ITI in Stenographer & Secretarial Assistant (Hindi)'},
                       {Name:'ITI in Computer Operator and Programming Assistant (COPA)'},
@@ -2187,7 +2187,7 @@ const treeData = {
                   ]
               },
               {Name:'Emerging and Modern Skill Trades',
-                  Children:[
+                  children:[
                       {Name:'ITI in Renewable Energy Technician (Solar)'},
                       {Name:'ITI in Internet of Things (IoT) Technician - Smart City'},
                       {Name:'ITI in IoT Technician - Smart Agriculture'},
@@ -2206,7 +2206,7 @@ const treeData = {
                   ]
               },
               {Name:'Skill-based & Specialized Trades',
-                  Children:[
+                  children:[
                       {Name:'ITI in Fireman'},
                       {Name:'ITI in Domestic Painter'},
                       {Name:'ITI in Leather Goods Maker'},
@@ -2234,7 +2234,7 @@ const treeData = {
                   ]
               },
               {Name:'Industry-Specific Trades',
-                  Children:[
+                  children:[
                       {Name:'ITI in Paint Technician'},
                       {Name:'ITI in Heavy Vehicle Driver'},
                       {Name:'ITI in Industrial Automation'},
@@ -2259,7 +2259,7 @@ const AcademicNodeCard = ({ node, onClick }) => (
     className="bg-white shadow-lg rounded-lg p-4 flex flex-col gap-2 overflow-hidden items-center justify-center cursor-pointer hover:bg-gray-100"
     onClick={() => onClick(node)}
   >
-    <h2 className="font-medium text-base">{node.name}</h2>
+    <h2 className="font-medium text-base">{node.Name}</h2>
     {node.children?.length > 0 && (
       <p className="text-gray-500 text-base">
         ({node.children.length} options)
@@ -2308,19 +2308,19 @@ const AcademicTreeVisualization = () => {
   };
 
   const searchTree = useCallback((node, searchTerm, path = []) => {
-    const match = node.name && (
-      node.name.toLowerCase() === searchTerm.toLowerCase() ||
-      (node.name.toLowerCase().includes(searchTerm.toLowerCase()) && searchTerm.length > 2)
+    const match = node.Name && (
+      node.Name.toLowerCase() === searchTerm.toLowerCase() ||
+      (node.Name.toLowerCase().includes(searchTerm.toLowerCase()) && searchTerm.length > 2)
     );
-    const newPath = [...path, { name: node.name, children: node.children }];
+    const newPath = [...path, { Name: node.Name, children: node.children }];
 
     if (match) {
       return [newPath];
     }
     if(searchTerm === ' ')
     {
-      node.name="10th";
-      const newPath = [...path, { name: node.name, children: node.children }];
+      node.Name="10th";
+      const newPath = [...path, { Name: node.Name, children: node.children }];
       return [newPath];
     }
 
@@ -2339,7 +2339,7 @@ const AcademicTreeVisualization = () => {
         setNodeHistory(firstMatchPath);
         setCurrentNode(firstMatchPath[firstMatchPath.length - 1]);
       } else {
-        setCurrentNode({ name: "No results found", children: [] });
+        setCurrentNode({ Name: "No results found", children: [] });
       }
     } else {
       setCurrentNode(nodeHistory[nodeHistory.length - 1]);
@@ -2366,7 +2366,7 @@ const AcademicTreeVisualization = () => {
           setCurrentNode(node);
           setCurrentPage(0);
         }}
-      >{node.name}{index < nodeHistory.length - 1 && (<MoveRight className='w-4 text-gray-400 m-2 mr-0'/>)}
+      >{node.Name}{index < nodeHistory.length - 1 && (<MoveRight className='w-4 text-gray-400 m-2 mr-0'/>)}
       </div>
     ));
   };
