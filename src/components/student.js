@@ -74,12 +74,8 @@ const StudentSelectionForm = ({ onSubmit, userinfon, userinfoa }) => {
       electiveGroups: {} // CBSE 10th Grade has no mandatory electives
     },
     "State Board": {compulsory: [
-      "Language 1 ",
-      "Language 2 ",
-      "Language 3 ",
-      "Social Science ",
-      "Mathematics",
-      "Science"
+      'FIRST LANGUAGE', 'SECOND LANGUAGE', 'THIRD LANGUAGE', 'MATHEMATICS', 
+                                                     'SCIENCE', 'SOCIAL SCIENCE'
     ],
     electiveGroups: {}
     },

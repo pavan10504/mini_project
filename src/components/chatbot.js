@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Plus, Route,BotMessageSquare} from 'lucide-react';
+import { Send, Plus, Route, BotMessageSquare } from 'lucide-react';
 import AcademicTreeVisualization from './tree2.js';
 import StudentSelectionForm from './student.js';
 
@@ -38,6 +38,58 @@ const Card = React.forwardRef(({ className, ...props }, ref) => (
 ))
 Card.displayName = "Card"
 
+const BOARD_CONFIGS = {
+  CBSE: {
+    requiredSubjects: 5,
+    maxSubjects: 5,
+    arraySize: 5,
+    subjectOrder: [
+      'English', 
+      'Hindi/Kannada', 
+      'Mathematics', 
+      'Science', 
+      'Social Science'
+    ]
+  },
+  ICSE: {
+    requiredSubjects: 6,
+    maxSubjects: 6,
+    arraySize: 15,
+    subjectOrder: [
+      'English', 
+      'Second Language', 
+      'History civics', 
+      'Geography', 
+      'Mathematics', 
+      'Physics', 
+      'Chemistry', 
+      'Biology', 
+      'Economics', 
+      'Commercial studies',
+      'Computer Applications', 
+      'Computer science', 
+      'Economic Applications', 
+      'Commercial applications', 
+      'Home Science'
+    ]
+  },
+  STATE: {
+    requiredSubjects: 6,
+    maxSubjects: 6,
+    arraySize: 6,
+    subjectOrder: [
+      'FIRST LANGUAGE', 
+      'SECOND LANGUAGE', 
+      'THIRD LANGUAGE', 
+      'MATHEMATICS', 
+      'SCIENCE', 
+      'SOCIAL SCIENCE'
+
+      
+    ]
+  }
+};
+
 const ChatbotLanding = ({ onToggleTree }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -48,17 +100,116 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const [showStudentForm, setShowStudentForm] = useState(false);
   const [studentData, setStudentData] = useState(null);
   const [subjectData, setSubjectData] = useState([]);
+  const [predictionResult, setPredictionResult] = useState(null);
 
+  const validateScores = (scores, board) => {
+    // Normalize board name
+    const normalizedBoard = board.replace(/\bBOARD\b/gi, '').trim().toUpperCase();
+    const config = BOARD_CONFIGS[normalizedBoard];
+    
+    if (!config) {
+      console.error('Invalid board:', board, 'Normalized:', normalizedBoard);
+      return false;
+    }
 
+    const filledScores = scores.filter(subject => subject.score !== '');
+    return filledScores.length >= config.requiredSubjects;
+  };
 
-  const handleSendMessage = () => {
-    if (inputMessage.trim()) {
-      setMessages([...messages, { text: inputMessage, sender: 'user' }]);
-      // Mock bot response
-      setTimeout(() => {
-        setMessages(prev => [...prev, { text: 'This is a mock response.', sender: 'bot' }]);
-      }, 1000);
+  const convertMarksToArray = (subjectData, board) => {
+    // Normalize board name
+    const normalizedBoard = board.replace(/\bBOARD\b/gi, '').trim().toUpperCase();
+    const config = BOARD_CONFIGS[normalizedBoard];
+    
+    if (!config) {
+      throw new Error(`Invalid board selected: ${board}`);
+    }
+
+    const marksArray = new Array(config.arraySize).fill(0);
+    subjectData.forEach((subjectEntry) => {
+      const orderIndex = config.subjectOrder.findIndex((s) => subjectEntry.subject.includes(s));
+      if (orderIndex !== 0 && subjectEntry.score) {
+        marksArray[orderIndex] = parseFloat(subjectEntry.score);
+      }
+    });
+
+    return marksArray;
+  };
+
+  const sendDataToBackend = async () => {
+    try {
+      if (!studentData || !studentData.selectedBoard) {
+        throw new Error('No board selected');
+      }
+
+      // Normalize board name
+      const normalizedBoard = studentData.selectedBoard
+        .replace(/\bBOARD\b/gi, '')
+        .trim()
+        .toLowerCase();
+
+      // Debug logs
+      console.log('Original board:', studentData.selectedBoard);
+      console.log('Normalized board:', normalizedBoard);
+      console.log('Available boards:', Object.keys(BOARD_CONFIGS));
+      
+      // Validate scores based on board requirements
+      if (!validateScores(subjectData, studentData.selectedBoard)) {
+        const config = BOARD_CONFIGS[normalizedBoard.toUpperCase()];
+        if (!config) {
+          throw new Error(`Invalid board selected: ${studentData.selectedBoard}`);
+        }
+        setMessages(prev => [...prev, 
+          { text: `Please fill in at least ${config.requiredSubjects} subjects for ${normalizedBoard.toUpperCase()} board.`, sender: 'bot' }
+        ]);
+        return;
+      }
+
+      // Convert subject data to array format based on board
+      const marksArray = convertMarksToArray(subjectData, studentData.selectedBoard);
+
+      // Prepare the request body
+      const requestBody = {
+        marks: marksArray
+      };
+
+      console.log('Sending to backend:', requestBody); // For debugging
+      console.log(`http://localhost:5000/predict/${normalizedBoard}`)
+      // Then make the POST request
+      const response = await fetch(`http://localhost:5000/predict/${normalizedBoard}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to get prediction');
+      }
+  
+      const result = await response.json();
+      setPredictionResult(result);
+      if(result){
+      // Add prediction result to chat
+      const resultMessage = `Based on your academic performance, here are your predicted course options:\n
+      Recommended Course: ${result.predicted_course}\n
+      Confidence: ${(Math.max(...result.probabilities[0]) * 100).toFixed(2)}%`;}
+
+      setMessages(prev => [
+        ...prev,
+        { text: inputMessage, sender: 'user' },
+        { text: "I'm here to help you with course predictions. Please provide your academic details using the + button.", sender: 'bot' }
+      ]);
       setInputMessage('');
+
+    } catch (error) {
+      console.error('Error:', error);
+      setMessages(prev => [...prev, 
+        { text: `Sorry, there was an error processing your results: ${error.message}`, sender: 'bot' }
+      ]);
     }
   };
   const handleInfoSubmit = (e) => {
@@ -66,20 +217,98 @@ const ChatbotLanding = ({ onToggleTree }) => {
     if (parseInt(userInfo.age) >= 16) {
       setShowStudentForm(true);
     } else {
+      setMessages(prev => [...prev, 
+        { text: 'Sorry, you must be at least 16 years old to use this service.', sender: 'bot' }
+      ]);
       setShowInfoCard(false);
     }
   };
+
+  const handleSendMessage = () => {
+    if (inputMessage.trim()) {
+      setMessages(prev => [...prev, { text: inputMessage, sender: 'user' }]);
+      
+      // Add bot response if needed
+      setMessages(prev => [...prev, 
+        { text: "I'm here to help you with course predictions. Please provide your academic details using the + button.", sender: 'bot' }
+      ]);
+      
+      setInputMessage('');
+    }
+  };
+
+  const handleExcelSubmit = () => {
+    // Check if all required scores are filled
+    const board = studentData.selectedBoard.toUpperCase();
+    const config = BOARD_CONFIGS[board];
+    
+    // Validate scores
+    if (!validateScores(subjectData, board)) {
+      setMessages(prev => [...prev, 
+        { text: `Please fill in at least ${config.requiredSubjects} subjects for ${board} board.`, sender: 'bot' }
+      ]);
+      return;
+    }
+
+    // Check if scores are within valid range (0-100)
+    const invalidScores = subjectData.filter(
+      subject => subject.score !== '' && (parseFloat(subject.score) < 0 || parseFloat(subject.score) > 100)
+    );
+
+    if (invalidScores.length > 0) {
+      setMessages(prev => [...prev, 
+        { text: 'Please ensure all scores are between 0 and 100.', sender: 'bot' }
+      ]);
+      return;
+    }
+    
+    sendDataToBackend();
+    setShowExcelSheet(false);
+  };
+
   const handleStudentFormSubmit = (data) => {
     setStudentData(data);
-    setSubjectData(data.subjects.compulsory.map(subject => ({
+    // Normalize board name to uppercase and trim any whitespace
+    const boardName = data.selectedBoard
+      .replace(/\bBOARD\b/gi, '')  // Remove the word "BOARD" (case-insensitive)
+      .trim()                      // Remove leading/trailing spaces
+      .toUpperCase();
+    
+    // Add debugging console log
+    console.log('Selected Board:', boardName);
+    console.log('Available Boards:', Object.keys(BOARD_CONFIGS));
+    
+    const boardConfig = BOARD_CONFIGS[boardName];
+    
+    if (!boardConfig) {
+      setMessages(prev => [...prev, 
+        { text: `Invalid board selected: ${boardName}. Available boards are: ${Object.keys(BOARD_CONFIGS).join(', ')}`, sender: 'bot' }
+      ]);
+      return;
+    }
+
+    // Set subject data based on board configuration
+    let subjects = [];
+    if (data.subjects.compulsory) {
+      subjects = [...data.subjects.compulsory];
+    }
+    
+    if (data.subjects.electives) {
+      Object.values(data.subjects.electives).forEach(electiveGroup => {
+        if (Array.isArray(electiveGroup)) {
+          subjects.push(...electiveGroup);
+        }
+      });
+    }
+
+    // Limit subjects based on board configuration
+    const limitedSubjects = subjects.slice(0, boardConfig.maxSubjects);
+    
+    setSubjectData(limitedSubjects.map(subject => ({
       subject,
       score: ''
     })));
-    Object.entries(data.subjects.electives).forEach(([group, subjects]) => {
-      subjects.forEach(subject => {
-        setSubjectData(prev => [...prev, { subject, score: '' }]);
-      });
-    });
+
     setShowStudentForm(false);
     setShowInfoCard(false);
     setShowExcelSheet(true);
@@ -88,37 +317,38 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const handleExcelToggle = () => {
     setShowExcelSheet(!showExcelSheet);
   };
+
   const handleTreeToggle = () => {
     setShowTree(!showTree);
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-200 to-purple-200">
-    <div className="absolute top-0 left-0 m-4">
-      <svg width="291.33000793457035" height="21.85620578894537" viewBox="0 0 380.8247841337083 28.570296999498833" class="looka-1j8o68f"><defs id="SvgjsDefs5247"></defs><g id="SvgjsG5248" featurekey="nameLeftFeature-0" transform="matrix(0.5516992342508144,0,0,0.5516992342508144,0.2693601892200865,0.5886872545826014)" fill="#000000"><path d="M5.4102 40.39063 q-2.4609375 0 -4.19921875 -1.73828125 q-1.69921875 -1.69921875 -1.69921875 -4.08203125 l0 -16.484 q0 -2.3828125 1.71875 -4.1015625 t4.1797 -1.7188 l11.582 0 q2.48046875 0 4.19921875 1.7578125 q1.69921875 1.6796875 1.69921875 4.0625 l0 2.4609 l-5.6055 0 l0 -2.4609 q0 -0.1953125 -0.1171875 -0.29296875 q-0.09765625 -0.09765625 -0.17578125 -0.09765625 l-11.582 0 q-0.078125 0 -0.1953125 0.1171875 q-0.078125 0.078125 -0.078125 0.2734375 l0 16.484 q0 0.21484375 0.09765625 0.33203125 q0.078125 0.05859375 0.17578125 0.05859375 l11.582 0 q0.09765625 0 0.17578125 -0.078125 q0.1171875 -0.1171875 0.1171875 -0.3125 l0 -2.4219 l5.6055 0 l0 2.4219 q0 2.3828125 -1.69921875 4.08203125 q-1.71875 1.73828125 -4.19921875 1.73828125 l-11.582 0 z M73.17419140625 40.39063 l-6.2305 0 l-1.875 -3.8672 l-5.4688 0 l0 -5.4297 l2.8125 0 l-4.0039 -8.2227 l-8.5547 17.52 l-6.2305 0 l14.785 -28.77 z M93.7900403125 12.245999999999999 l5.6445 0 l0 28.145 l-5.6445 0 l0 -28.145 z M118.2433203125 36.8359 l-7.1484 0 l-10.723 -13.281 l6.7969 0 q2.87109375 -0.078125 3.828125 -1.015625 q0.56640625 -0.546875 0.56640625 -1.71875 q0 -1.71875 -0.78125 -2.44140625 q-0.72265625 -0.703125 -1.9921875 -0.703125 l-0.11719 0 l-5.8398 0 l0 -5.4297 l5.7617 0 q3.6328125 -0.1171875 6.1328125 2.24609375 q2.4609375 2.32421875 2.4609375 6.328125 q0 3.37890625 -2.1875 5.5078125 q-1.5625 1.58203125 -3.53515625 2.0703125 z M134.71826296875 23.613 l13.633 0 l0 5.4297 l-13.633 0 l0 -5.4297 z M134.71826296875 34.9609 l22.637 0 l0 5.4297 l-22.637 0 l0 -5.4297 z M134.71826296875 12.227 l22.637 0 l0 5.4297 l-22.637 0 l0 -5.4297 z M178.302735625 23.613 l13.633 0 l0 5.4297 l-13.633 0 l0 -5.4297 z M178.302735625 34.9609 l22.637 0 l0 5.4297 l-22.637 0 l0 -5.4297 z M178.302735625 12.227 l22.637 0 l0 5.4297 l-22.637 0 l0 -5.4297 z M221.88720828125 12.245999999999999 l5.6445 0 l0 28.145 l-5.6445 0 l0 -28.145 z M246.34048828125 
-      36.8359 l-7.1484 0 l-10.723 -13.281 l6.7969 0 q2.87109375 -0.078125 3.828125 -1.015625 q0.56640625 -0.546875 0.56640625 -1.71875 q0 -1.71875 -0.78125 -2.44140625 q-0.72265625 -0.703125 -1.9921875 -0.703125 l-0.11719 0 l-5.8398 0 l0 -5.4297 l5.7617 0 q3.6328125 -0.1171875 6.1328125 2.24609375 q2.4609375 2.32421875 2.4609375 6.328125 q0 3.37890625 -2.1875 5.5078125 q-1.5625 1.58203125 -3.53515625 2.0703125 z"></path></g><g id="SvgjsG5249" featurekey="inlineSymbolFeature-0" transform="matrix(1.020367680475069,0,0,1.020367680475069,152.8019126733727,-2.040735360950138)" fill="#000000"><g xmlns="http://www.w3.org/2000/svg"><path d="M16,18.567c-5.58,0-10.119,4.539-10.119,10.119v0.276C5.881,29.536,6.345,30,6.918,30s1.037-0.464,1.037-1.037v-0.276   c0-4.436,3.609-8.045,8.045-8.045s8.045,3.609,8.045,8.045v0.276c0,0.573,0.464,1.037,1.037,1.037s1.037-0.464,1.037-1.037v-0.276   C26.119,23.106,21.58,18.567,16,18.567z"></path><path d="M28.583,15.434L26.33,13.18c-0.181-0.181-0.427-0.283-0.683-0.283c-0.861,0-1.292,1.041-0.683,1.65l0.534,0.533h-4.756   c1.079-1.159,1.745-2.707,1.745-4.411c0-3.576-2.91-6.486-6.486-6.486H6.503L7.037,3.65C7.646,3.041,7.215,2,6.354,2   C6.097,2,5.852,2.102,5.67,2.283L3.417,4.537c-0.377,0.377-0.377,0.989,0,1.367L5.67,8.157C5.852,8.338,6.097,8.44,6.354,8.44   c0.861,0,1.292-1.041,0.683-1.65L6.503,6.257h4.756c-1.079,1.159-1.745,2.707-1.745,4.411c0,3.576,2.91,6.486,6.486,6.486h9.496   l-0.533,0.533c-0.609,0.609-0.178,1.65,0.683,1.65c0.256,0,0.502-0.102,0.683-0.283l2.254-2.254   C28.961,16.423,28.961,15.811,28.583,15.434z M16,6.257c2.433,0,4.411,1.979,4.411,4.411S18.433,15.08,16,15.08   s-4.411-1.979-4.411-4.411S13.567,6.257,16,6.257z"></path></g></g><g id="SvgjsG5250" featurekey="nameRightFeature-0" transform="matrix(0.5516992342508144,0,0,0.5516992342508144,193.0184486818324,0.5886872545826014)" fill="#000000"><path d="M28.64306640625 40.39063 l-6.4453 0 q-2.48046875 0 -4.21875 -1.73828125 q-1.69921875 -1.69921875 -1.69921875 -4.08203125 l0 -16.484 q0 -2.3828125 1.71875 -4.1015625 t4.1992 -1.7188 l11.563 0 q2.48046875 0 4.19921875 1.7578125 q1.69921875 1.6796875 1.69921875 4.0625 l0 2.4609 l-5.6055 0 l0 -2.4609 q0 -0.1953125 -0.1171875 -0.29296875 q-0.09765625 -0.09765625 -0.17578125 -0.09765625 
-      l-11.563 0 q-0.09765625 0 -0.21484375 0.1171875 q-0.078125 0.078125 -0.078125 0.2734375 l0 16.484 q0 0.21484375 0.09765625 0.33203125 q0.078125 0.05859375 0.1953125 0.05859375 l6.4453 0 l0 5.4297 z M39.65906640625 32.9687 l-5.6055 0 l0 -3.9453 l-6.3672 0.019531 l-0.019531 -5.4297 l11.992 -0.019531 l0 9.375 z M71.2116640625 34.9609 l0 5.4297 l-4.7266 0 q-2.48046875 0 -4.21875 -1.73828125 q-1.69921875 -1.69921875 -1.69921875 -4.0625 l0 -22.344 l5.625 0 l0 22.344 q0 0.1953125 0.09765625 0.3125 q0.078125 0.05859375 0.1953125 0.05859375 l4.7266 0 z M78.3406640625 12.245999999999999 l5.6055 0 l0 28.145 l-5.6055 0 l0 -28.145 z M104.85498171875 12.245999999999999 l5.625 0 l0 28.145 l-5.625 0 l0 -28.145 z M137.228496875 40.39063 l-5.625 0 l0 -28.145 l17.48 0 q2.48046875 0 4.19921875 1.7578125 q1.69921875 1.6796875 1.69921875 4.0625 l0 16.484 q0 2.3828125 -1.69921875 4.08203125 q-1.71875 1.73828125 -4.19921875 1.73828125 l-4.8438 0 l0 -5.4297 l4.8438 0 q0.078125 0 0.17578125 -0.09765625 q0.1171875 -0.09765625 0.1171875 -0.29296875 l0 -16.484 q0 -0.1953125 -0.1171875 -0.29296875 q-0.09765625 -0.09765625 -0.17578125 -0.09765625 l-11.855 0 l0 22.715 z M205.20739453125 40.39063 l-6.2305 0 l-1.875 -3.8672 l-5.4688 0 l0 -5.4297 l2.8125 0 l-4.0039 -8.2227 l-8.5547 17.52 l-6.2305 0 l14.785 -28.77 z M252.5225234375 12.245999999999999 l0 28.145 l-5.6055 0 l0 -28.145 l5.6055 0 z M231.2138234375 12.245999999999999 l8.4375 10.293 l0 8.7695 l-8.2031 -10.02 l0 19.102 l-5.625 0 l0 -28.145 l5.3906 0 z M279.32963359375 40.39063 q-2.4609375 0 -4.19921875 -1.73828125 q-1.69921875 -1.69921875 -1.69921875 -4.08203125 l0 -16.484 q0 -2.3828125 1.71875 -4.1015625 t4.1797 -1.7188 l11.582 0 q2.48046875 0 4.19921875 1.7578125 q1.69921875 1.6796875 1.69921875 4.0625 l0 2.4609 l-5.6055 0 l0 -2.4609 q0 -0.1953125 -0.1171875 -0.29296875 q-0.09765625 -0.09765625 -0.17578125 -0.09765625 l-11.582 0 q-0.078125 0 -0.1953125 0.1171875 q-0.078125 0.078125 -0.078125 0.2734375 l0 16.484 q0 0.21484375 0.09765625 0.33203125 q0.078125 0.05859375 0.17578125 0.05859375 l11.582 0 q0.09765625 0 0.17578125 -0.078125 q0.1171875 -0.1171875 0.1171875 -0.3125 l0 -2.4219 l5.6055 0 l0 2.4219 q0 2.3828125 -1.69921875 4.08203125 q-1.71875 1.73828125 -4.19921875 1.73828125 
-      l-11.582 0 z M317.777345 23.613 l13.633 0 l0 5.4297 l-13.633 0 l0 -5.4297 z M317.777345 34.9609 l22.637 0 l0 5.4297 l-22.637 0 l0 -5.4297 z M317.777345 12.227 l22.637 0 l0 5.4297 l-22.637 0 l0 -5.4297 z"></path></g></svg>
+      <div className="absolute top-0 left-0 m-4">
+        <svg width="291.33000793457035" height="21.85620578894537" viewBox="0 0 380.8247841337083 28.570296999498833" className="looka-1j8o68f">
+          {/* ... SVG content ... */}
+        </svg>
       </div>
-      <Card className="w-full max-w-4xl h-[600px]  p-6 shadow-xl overflow-hidden flex flex-col">
+      <Card className="w-full max-w-4xl h-[600px] p-6 shadow-xl overflow-hidden flex flex-col">
         <div className="flex justify-between items-center mb-4">
           <Button onClick={handleTreeToggle} className="p-2">
             <Route className="h-4 w-4 mr-2" />
             Goal Navigator
-           </Button>
-           {showTree&&(<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <Card className="w-3/4 h-[600px]  p-6  flex flex-col justify-center items-center overflow-auto">
-          <AcademicTreeVisualization className="relative w-full" isVisible={showTree}/>
-          <Button onClick={handleTreeToggle} className="h-[50px] w-[50px] m-2">Close</Button>
-          </Card>
-          </div>)}
-          <div className="text-2xl font-bold flex flex-row items-center justify-between ">
-          <h1 className="pr-2">Chatbot</h1>
-          <svg width="1em" height="1em">
-          <BotMessageSquare classname="h-4 w-3 mr-2"/>
-          </svg>
+          </Button>
+          {showTree && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+              <Card className="w-3/4 h-[600px] p-6 flex flex-col justify-center items-center overflow-auto">
+                <AcademicTreeVisualization className="relative w-full" isVisible={showTree}/>
+                <Button onClick={handleTreeToggle} className="h-[50px] w-[50px] m-2">Close</Button>
+              </Card>
+            </div>
+          )}
+          <div className="text-2xl font-bold flex flex-row items-center justify-between">
+            <h1 className="pr-2">Chatbot</h1>
+            <BotMessageSquare className="h-4 w-4"/>
           </div>
         </div>
+
         {showInfoCard && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
             <Card className="w-96 p-6">
@@ -153,7 +383,8 @@ const ChatbotLanding = ({ onToggleTree }) => {
             </Card>
           </div>
         )}
-        <div className="flex flex-col h-full overflow-hidden ">
+
+        <div className="flex flex-col h-full overflow-hidden">
           <div className="flex-grow overflow-auto mb-4 mt-4 space-y-4 scrollbar-none">
             {messages.map((message, index) => (
               <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -179,6 +410,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
           </div>
         </div>
       </Card>
+
       {showExcelSheet && studentData && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <Card className="min-w-0 min-h-0 p-6 overflow-auto">
@@ -188,40 +420,44 @@ const ChatbotLanding = ({ onToggleTree }) => {
               <p><strong>Age:</strong> {userInfo.age}</p>
               <p><strong>Board:</strong> {studentData.selectedBoard}</p>
             </div>
-            <table className="w-4/4 border-collapse  flex items-center justify-center left-1/2">
-            <div className="left-1/2">
-              <thead>
-                <tr>
-                  <th className="border p-2">Subject</th>
-                  <th className="border p-2">Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {subjectData.map((subject, index) => (
-                  <tr key={index}>
-                    <td className="border p-2 w-1/4">{subject.subject}</td>
-                    <td className="border p-2 w-1/4">
-                      <Input 
-                        placeholder="Enter score"
-                        type="number"
-                        value={subject.score}
-                        onChange={(e) => {
-                          const newSubjectData = [...subjectData];
-                          newSubjectData[index].score = e.target.value;
-                          setSubjectData(newSubjectData);
-                        }}
-                      />
-                    </td>
+            <table className="w-4/4 border-collapse flex items-center justify-center left-1/2">
+              <div className="left-1/2">
+                <thead>
+                  <tr>
+                    <th className="border p-2">Subject</th>
+                    <th className="border p-2">Score</th>
                   </tr>
-                ))}
-              </tbody>
+                </thead>
+                <tbody>
+                  {subjectData.map((subject, index) => (
+                    <tr key={index}>
+                      <td className="border p-2 w-1/4">{subject.subject}</td>
+                      <td className="border p-2 w-1/4">
+                        <Input 
+                          placeholder="Enter score"
+                          type="number"
+                          value={subject.score}
+                          onChange={(e) => {
+                            const newSubjectData = [...subjectData];
+                            newSubjectData[index].score = e.target.value;
+                            setSubjectData(newSubjectData);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </div>
             </table>
-            <Button onClick={handleExcelToggle} className="mt-4">Close</Button>
+            <div className="flex justify-between mt-4">
+              <Button onClick={handleExcelToggle}>Close</Button>
+              <Button onClick={handleExcelSubmit} className="bg-green-500 hover:bg-green-600">
+                Submit Scores
+              </Button>
+            </div>
           </Card>
         </div>
       )}
-
     </div>
   );
 };
