@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Send, Plus, Route, BotMessageSquare } from 'lucide-react';
 import AcademicTreeVisualization from './tree2.js';
 import StudentSelectionForm from './student.js';
+import StreamRecommendationAI from './recomend.js';
 
 const Button = React.forwardRef(({ className, ...props }, ref) => {
   return (
@@ -73,7 +74,7 @@ const BOARD_CONFIGS = {
       'Home Science'
     ]
   },
-  STATE: {
+  STATEBOARD: {
     requiredSubjects: 6,
     maxSubjects: 6,
     arraySize: 6,
@@ -100,123 +101,48 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const [showStudentForm, setShowStudentForm] = useState(false);
   const [studentData, setStudentData] = useState(null);
   const [subjectData, setSubjectData] = useState([]);
+  const [streamRecommendations, setStreamRecommendations] = useState(null); // To hold AI recommendation results
   const [predictionResult, setPredictionResult] = useState(null);
+  const [condensedScores, setCondensedScores] = useState(null);
+  const [board, setBoard] = useState(null);
 
-  const validateScores = (scores, board) => {
-    // Normalize board name
-    const normalizedBoard = board.replace(/\bBOARD\b/gi, '').trim().toUpperCase();
-    const config = BOARD_CONFIGS[normalizedBoard];
-    
-    if (!config) {
-      console.error('Invalid board:', board, 'Normalized:', normalizedBoard);
-      return false;
-    }
 
-    const filledScores = scores.filter(subject => subject.score !== '');
-    return filledScores.length >= config.requiredSubjects;
+  const handleCondensedScores = (scores) => {
+    setCondensedScores(scores);
+    setMessages((prev) => [
+      ...prev,
+      { text: `Subjects have been condensed: ${JSON.stringify(scores)}`, sender: 'bot' },
+    ]);
+
+    calculateRecommendations(scores);
   };
 
-  const convertMarksToArray = (subjectData, board) => {
-    // Normalize board name
-    const normalizedBoard = board.replace(/\bBOARD\b/gi, '').trim().toUpperCase();
-    const config = BOARD_CONFIGS[normalizedBoard];
-    
-    if (!config) {
-      throw new Error(`Invalid board selected: ${board}`);
-    }
+  const calculateRecommendations = (scores) => {
+    // Placeholder for AI calculation logic
+    const recommendedStream = scores.Science > scores.Mathematics ? 'Science Stream' : 'Commerce Stream';
+    const confidence = Math.random() * 20 + 80; // Dummy confidence calculation
 
-    const marksArray = new Array(config.arraySize).fill(0);
-    subjectData.forEach((subjectEntry) => {
-      const orderIndex = config.subjectOrder.findIndex((s) => subjectEntry.subject.includes(s));
-      if (orderIndex !== 0 && subjectEntry.score) {
-        marksArray[orderIndex] = parseFloat(subjectEntry.score);
-      }
-    });
-
-    return marksArray;
-  };
-
-  const sendDataToBackend = async () => {
-    try {
-      if (!studentData || !studentData.selectedBoard) {
-        throw new Error('No board selected');
-      }
-
-      // Normalize board name
-      const normalizedBoard = studentData.selectedBoard
-        .replace(/\bBOARD\b/gi, '')
-        .trim()
-        .toLowerCase();
-
-      // Debug logs
-      console.log('Original board:', studentData.selectedBoard);
-      console.log('Normalized board:', normalizedBoard);
-      console.log('Available boards:', Object.keys(BOARD_CONFIGS));
-      
-      // Validate scores based on board requirements
-      if (!validateScores(subjectData, studentData.selectedBoard)) {
-        const config = BOARD_CONFIGS[normalizedBoard.toUpperCase()];
-        if (!config) {
-          throw new Error(`Invalid board selected: ${studentData.selectedBoard}`);
-        }
-        setMessages(prev => [...prev, 
-          { text: `Please fill in at least ${config.requiredSubjects} subjects for ${normalizedBoard.toUpperCase()} board.`, sender: 'bot' }
-        ]);
-        return;
-      }
-
-      // Convert subject data to array format based on board
-      const marksArray = convertMarksToArray(subjectData, studentData.selectedBoard);
-
-      // Prepare the request body
-      const requestBody = {
-        marks: marksArray
-      };
-
-      console.log('Sending to backend:', requestBody); // For debugging
-      console.log(`http://localhost:5000/predict/${normalizedBoard}`)
-      // Then make the POST request
-      const response = await fetch(`http://localhost:5000/predict/${normalizedBoard}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to get prediction');
-      }
-  
-      const result = await response.json();
-      setPredictionResult(result);
-      if(result){
-      // Add prediction result to chat
-      const resultMessage = `Based on your academic performance, here are your predicted course options:\n
-      Recommended Course: ${result.predicted_course}\n
-      Confidence: ${(Math.max(...result.probabilities[0]) * 100).toFixed(2)}%`;}
-
-      setMessages(prev => [
-        ...prev,
-        { text: inputMessage, sender: 'user' },
-        { text: "I'm here to help you with course predictions. Please provide your academic details using the + button.", sender: 'bot' }
-      ]);
-      setInputMessage('');
-
-    } catch (error) {
-      console.error('Error:', error);
-      setMessages(prev => [...prev, 
-        { text: `Sorry, there was an error processing your results: ${error.message}`, sender: 'bot' }
-      ]);
-    }
+    setMessages((prev) => [
+      ...prev,
+      {
+        text: `Based on the condensed data, the recommended stream is ${recommendedStream} with a confidence of ${confidence.toFixed(
+          2
+        )}%.`,
+        sender: 'bot',
+      },
+    ]);
   };
   const handleInfoSubmit = (e) => {
     e.preventDefault();
-    if (parseInt(userInfo.age) >= 16) {
+    
+    if (parseInt(userInfo.age) >= 16 && parseInt(userInfo.age) <= 22) {
       setShowStudentForm(true);
-    } else {
+    } else if (parseInt(userInfo.age) >  22) {
+      setMessages(prev => [...prev, 
+        { text: 'Sorry, you must be below 22 years old to use this service.', sender: 'bot' }
+      ]);
+      setShowInfoCard(false);
+    }else {
       setMessages(prev => [...prev, 
         { text: 'Sorry, you must be at least 16 years old to use this service.', sender: 'bot' }
       ]);
@@ -236,36 +162,6 @@ const ChatbotLanding = ({ onToggleTree }) => {
       setInputMessage('');
     }
   };
-
-  const handleExcelSubmit = () => {
-    // Check if all required scores are filled
-    const board = studentData.selectedBoard.toUpperCase();
-    const config = BOARD_CONFIGS[board];
-    
-    // Validate scores
-    if (!validateScores(subjectData, board)) {
-      setMessages(prev => [...prev, 
-        { text: `Please fill in at least ${config.requiredSubjects} subjects for ${board} board.`, sender: 'bot' }
-      ]);
-      return;
-    }
-
-    // Check if scores are within valid range (0-100)
-    const invalidScores = subjectData.filter(
-      subject => subject.score !== '' && (parseFloat(subject.score) < 0 || parseFloat(subject.score) > 100)
-    );
-
-    if (invalidScores.length > 0) {
-      setMessages(prev => [...prev, 
-        { text: 'Please ensure all scores are between 0 and 100.', sender: 'bot' }
-      ]);
-      return;
-    }
-    
-    sendDataToBackend();
-    setShowExcelSheet(false);
-  };
-
   const handleStudentFormSubmit = (data) => {
     setStudentData(data);
     // Normalize board name to uppercase and trim any whitespace
@@ -281,43 +177,50 @@ const ChatbotLanding = ({ onToggleTree }) => {
     const boardConfig = BOARD_CONFIGS[boardName];
     
     if (!boardConfig) {
-      setMessages(prev => [...prev, 
-        { text: `Invalid board selected: ${boardName}. Available boards are: ${Object.keys(BOARD_CONFIGS).join(', ')}`, sender: 'bot' }
+      setMessages((prev) => [
+        ...prev,
+        { text: 'Invalid board selected. Please try again.', sender: 'bot' },
       ]);
       return;
     }
 
-    // Set subject data based on board configuration
-    let subjects = [];
-    if (data.subjects.compulsory) {
-      subjects = [...data.subjects.compulsory];
-    }
-    
-    if (data.subjects.electives) {
-      Object.values(data.subjects.electives).forEach(electiveGroup => {
-        if (Array.isArray(electiveGroup)) {
-          subjects.push(...electiveGroup);
-        }
-      });
-    }
+    const subjects = data.subjects.compulsory.concat(
+      Object.values(data.subjects.electives || {}).flat()
+    ).slice(0, boardConfig.maxSubjects);
 
-    // Limit subjects based on board configuration
-    const limitedSubjects = subjects.slice(0, boardConfig.maxSubjects);
-    
-    setSubjectData(limitedSubjects.map(subject => ({
-      subject,
-      score: ''
-    })));
+    setSubjectData(subjects.map((subject) => ({ subject, score: '' })));
 
     setShowStudentForm(false);
     setShowInfoCard(false);
     setShowExcelSheet(true);
   };
-
-  const handleExcelToggle = () => {
-    setShowExcelSheet(!showExcelSheet);
+  const handleExcelSubmit = () => {
+    const validScores = subjectData.filter((subject) => subject.score !== '');
+  
+    if (validScores.length < BOARD_CONFIGS[studentData.selectedBoard.toUpperCase()].requiredSubjects) {
+      setMessages((prev) => [
+        ...prev,
+        { text: 'Please fill in all required subjects with valid scores.', sender: 'bot' },
+      ]);
+      return;
+    }
+  
+    const condensedScores = validScores.reduce((acc, subject) => {
+      acc[subject.subject] = parseFloat(subject.score);
+      return acc;
+    }, {});
+    console.log(condensedScores)
+    setCondensedScores(condensedScores);
+  
+    // Send scores to AI recommendation system
+    setStreamRecommendations(condensedScores); // Pass condensed data
+    setShowExcelSheet(false);
   };
-
+  
+  
+const handleExcelToggle=()=>{
+  setShowExcelSheet(!showExcelSheet);
+}
   const handleTreeToggle = () => {
     setShowTree(!showTree);
   };
@@ -410,6 +313,13 @@ const ChatbotLanding = ({ onToggleTree }) => {
           </div>
         </div>
       </Card>
+      {streamRecommendations && (
+  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+    <Card className="w-3/4 h-[600px] p-6 overflow-auto">
+      <StreamRecommendationAI subjectData={subjectData} board={studentData.selectedBoard} onClose={() => setStreamRecommendations(null)} />
+    </Card>
+  </div>
+)}
 
       {showExcelSheet && studentData && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
