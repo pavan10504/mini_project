@@ -102,36 +102,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const [studentData, setStudentData] = useState(null);
   const [subjectData, setSubjectData] = useState([]);
   const [streamRecommendations, setStreamRecommendations] = useState(null); // To hold AI recommendation results
-  const [predictionResult, setPredictionResult] = useState(null);
-  const [condensedScores, setCondensedScores] = useState(null);
-  const [board, setBoard] = useState(null);
 
-
-  const handleCondensedScores = (scores) => {
-    setCondensedScores(scores);
-    setMessages((prev) => [
-      ...prev,
-      { text: `Subjects have been condensed: ${JSON.stringify(scores)}`, sender: 'bot' },
-    ]);
-
-    calculateRecommendations(scores);
-  };
-
-  const calculateRecommendations = (scores) => {
-    // Placeholder for AI calculation logic
-    const recommendedStream = scores.Science > scores.Mathematics ? 'Science Stream' : 'Commerce Stream';
-    const confidence = Math.random() * 20 + 80; // Dummy confidence calculation
-
-    setMessages((prev) => [
-      ...prev,
-      {
-        text: `Based on the condensed data, the recommended stream is ${recommendedStream} with a confidence of ${confidence.toFixed(
-          2
-        )}%.`,
-        sender: 'bot',
-      },
-    ]);
-  };
   const handleInfoSubmit = (e) => {
     e.preventDefault();
     
@@ -209,9 +180,6 @@ const ChatbotLanding = ({ onToggleTree }) => {
       acc[subject.subject] = parseFloat(subject.score);
       return acc;
     }, {});
-    console.log(condensedScores)
-    setCondensedScores(condensedScores);
-  
     // Send scores to AI recommendation system
     setStreamRecommendations(condensedScores); // Pass condensed data
     setShowExcelSheet(false);
