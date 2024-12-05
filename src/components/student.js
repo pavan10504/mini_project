@@ -65,9 +65,9 @@ const StudentSelectionForm = ({ onSubmit, userinfon, userinfoa }) => {
     },
     "CBSE": {
       compulsory: [
-        "Language 1 ",
-        "Language 2 ",
-        "Social Science ",
+        "English",
+        "Hindi",
+        "Social Studies",
         "Mathematics",
         "Science"
       ],

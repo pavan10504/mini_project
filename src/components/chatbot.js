@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Plus, Route, BotMessageSquare } from 'lucide-react';
+import { Send, Plus, Route, BotMessageSquare,SquareLibrary } from 'lucide-react';
 import AcademicTreeVisualization from './tree2.js';
 import StudentSelectionForm from './student.js';
 import StreamRecommendationAI from './recomend.js';
@@ -45,11 +45,11 @@ const BOARD_CONFIGS = {
     maxSubjects: 5,
     arraySize: 5,
     subjectOrder: [
-      'English', 
-      'Hindi/Kannada', 
-      'Mathematics', 
-      'Science', 
-      'Social Science'
+      'English',
+      'Hindi/Kannada',
+      'Mathematics',
+      'Science',
+      'Social Studies'
     ]
   },
   ICSE: {
@@ -57,20 +57,20 @@ const BOARD_CONFIGS = {
     maxSubjects: 6,
     arraySize: 15,
     subjectOrder: [
-      'English', 
-      'Second Language', 
-      'History civics', 
-      'Geography', 
-      'Mathematics', 
-      'Physics', 
-      'Chemistry', 
-      'Biology', 
-      'Economics', 
+      'English',
+      'Second Language',
+      'History civics',
+      'Geography',
+      'Mathematics',
+      'Physics',
+      'Chemistry',
+      'Biology',
+      'Economics',
       'Commercial studies',
-      'Computer Applications', 
-      'Computer science', 
-      'Economic Applications', 
-      'Commercial applications', 
+      'Computer Applications',
+      'Computer science',
+      'Economic Applications',
+      'Commercial applications',
       'Home Science'
     ]
   },
@@ -79,14 +79,14 @@ const BOARD_CONFIGS = {
     maxSubjects: 6,
     arraySize: 6,
     subjectOrder: [
-      'FIRST LANGUAGE', 
-      'SECOND LANGUAGE', 
-      'THIRD LANGUAGE', 
-      'MATHEMATICS', 
-      'SCIENCE', 
+      'FIRST LANGUAGE',
+      'SECOND LANGUAGE',
+      'THIRD LANGUAGE',
+      'MATHEMATICS',
+      'SCIENCE',
       'SOCIAL SCIENCE'
 
-      
+
     ]
   }
 };
@@ -99,23 +99,24 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const [showExcelSheet, setShowExcelSheet] = useState(false);
   const [showTree, setShowTree] = useState(false);
   const [showStudentForm, setShowStudentForm] = useState(false);
+  const [showRecommedation, setShowRecommendation] = useState(true);
   const [studentData, setStudentData] = useState(null);
   const [subjectData, setSubjectData] = useState([]);
-  const [streamRecommendations, setStreamRecommendations] = useState(null); // To hold AI recommendation results
+  const [streamRecommendations, setStreamRecommendations] = useState(false); // To hold AI recommendation results
 
   const handleInfoSubmit = (e) => {
     e.preventDefault();
-    
+
     if (parseInt(userInfo.age) >= 16 && parseInt(userInfo.age) <= 22) {
       setShowStudentForm(true);
-    } else if (parseInt(userInfo.age) >  22) {
-      setMessages(prev => [...prev, 
-        { text: 'Sorry, you must be below 22 years old to use this service.', sender: 'bot' }
+    } else if (parseInt(userInfo.age) > 22) {
+      setMessages(prev => [...prev,
+      { text: 'Sorry, you must be below 22 years old to use this service.', sender: 'bot' }
       ]);
       setShowInfoCard(false);
-    }else {
-      setMessages(prev => [...prev, 
-        { text: 'Sorry, you must be at least 16 years old to use this service.', sender: 'bot' }
+    } else {
+      setMessages(prev => [...prev,
+      { text: 'Sorry, you must be at least 16 years old to use this service.', sender: 'bot' }
       ]);
       setShowInfoCard(false);
     }
@@ -124,12 +125,12 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
       setMessages(prev => [...prev, { text: inputMessage, sender: 'user' }]);
-      
+
       // Add bot response if needed
-      setMessages(prev => [...prev, 
-        { text: "I'm here to help you with course predictions. Please provide your academic details using the + button.", sender: 'bot' }
+      setMessages(prev => [...prev,
+      { text: "I'm here to help you with course predictions. Please provide your academic details using the + button.", sender: 'bot' }
       ]);
-      
+
       setInputMessage('');
     }
   };
@@ -140,13 +141,13 @@ const ChatbotLanding = ({ onToggleTree }) => {
       .replace(/\bBOARD\b/gi, '')  // Remove the word "BOARD" (case-insensitive)
       .trim()                      // Remove leading/trailing spaces
       .toUpperCase();
-    
+
     // Add debugging console log
     console.log('Selected Board:', boardName);
     console.log('Available Boards:', Object.keys(BOARD_CONFIGS));
-    
+
     const boardConfig = BOARD_CONFIGS[boardName];
-    
+
     if (!boardConfig) {
       setMessages((prev) => [
         ...prev,
@@ -167,7 +168,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
   };
   const handleExcelSubmit = () => {
     const validScores = subjectData.filter((subject) => subject.score !== '');
-  
+
     if (validScores.length < BOARD_CONFIGS[studentData.selectedBoard.toUpperCase()].requiredSubjects) {
       setMessages((prev) => [
         ...prev,
@@ -175,7 +176,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
       ]);
       return;
     }
-  
+
     const condensedScores = validScores.reduce((acc, subject) => {
       acc[subject.subject] = parseFloat(subject.score);
       return acc;
@@ -184,11 +185,14 @@ const ChatbotLanding = ({ onToggleTree }) => {
     setStreamRecommendations(condensedScores); // Pass condensed data
     setShowExcelSheet(false);
   };
-  
-  
-const handleExcelToggle=()=>{
-  setShowExcelSheet(!showExcelSheet);
-}
+
+
+  const handleExcelToggle = () => {
+    setShowExcelSheet(!showExcelSheet);
+  }
+  const handleRecommendation = () => {
+    setShowRecommendation(!showRecommedation);
+  }
   const handleTreeToggle = () => {
     setShowTree(!showTree);
   };
@@ -202,21 +206,34 @@ const handleExcelToggle=()=>{
       </div>
       <Card className="w-full max-w-4xl h-[600px] p-6 shadow-xl overflow-hidden flex flex-col">
         <div className="flex justify-between items-center mb-4">
-          <Button onClick={handleTreeToggle} className="p-2">
+          <div className='flex flex-col gap -3 items-center mb-4'>
+          <Button onClick={handleTreeToggle} className="mb-2 p-4 gap-3">
             <Route className="h-4 w-4 mr-2" />
             Goal Navigator
           </Button>
           {showTree && (
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
               <Card className="w-3/4 h-[600px] p-6 flex flex-col justify-center items-center overflow-auto">
-                <AcademicTreeVisualization className="relative w-full" isVisible={showTree}/>
+                <AcademicTreeVisualization className="relative w-full" isVisible={showTree} />
                 <Button onClick={handleTreeToggle} className="h-[50px] w-[50px] m-2">Close</Button>
               </Card>
             </div>
           )}
+          <Button onClick={handleRecommendation} className="p-2">
+            <SquareLibrary className="h-4 w-4 mr-2" />
+            Recomendations
+          </Button>
+          {streamRecommendations && showRecommedation && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+              <Card className="w-3/4 h-[600px] p-6 overflow-auto">
+                <StreamRecommendationAI subjectData={subjectData} board={studentData.selectedBoard} onClose={() => setStreamRecommendations(null)} />
+                <Button onClick={handleRecommendation} className="h-[50px] w-[50px] m-2">Close</Button>
+              </Card>
+            </div>
+          )}</div>
           <div className="text-2xl font-bold flex flex-row items-center justify-between">
             <h1 className="pr-2">Chatbot</h1>
-            <BotMessageSquare className="h-4 w-4"/>
+            <BotMessageSquare className="h-4 w-4" />
           </div>
         </div>
 
@@ -248,7 +265,7 @@ const handleExcelToggle=()=>{
               ) : (
                 <div className="p-4">
                   <h2 className="text-xl font-bold mb-4">Student Information</h2>
-                  <StudentSelectionForm onSubmit={handleStudentFormSubmit} userinfon={userInfo.name} userinfoa={userInfo.age}/>
+                  <StudentSelectionForm onSubmit={handleStudentFormSubmit} userinfon={userInfo.name} userinfoa={userInfo.age} />
                 </div>
               )}
             </Card>
@@ -281,13 +298,6 @@ const handleExcelToggle=()=>{
           </div>
         </div>
       </Card>
-      {streamRecommendations && (
-  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-    <Card className="w-3/4 h-[600px] p-6 overflow-auto">
-      <StreamRecommendationAI subjectData={subjectData} board={studentData.selectedBoard} onClose={() => setStreamRecommendations(null)} />
-    </Card>
-  </div>
-)}
 
       {showExcelSheet && studentData && (
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
@@ -311,7 +321,7 @@ const handleExcelToggle=()=>{
                     <tr key={index}>
                       <td className="border p-2 w-1/4">{subject.subject}</td>
                       <td className="border p-2 w-1/4">
-                        <Input 
+                        <Input
                           placeholder="Enter score"
                           type="number"
                           value={subject.score}

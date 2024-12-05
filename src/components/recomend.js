@@ -1,18 +1,19 @@
 import React, { useState, useRef, useEffect, useCallback,useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
 const Button = React.forwardRef(({ className, ...props }, ref) => {
   return (
     <button
       className={`inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background 
-      transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
-      disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ${className}`}
+        transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
+        disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ${className}`}
       ref={ref}
       {...props}
     />
-  );
-});
-Button.displayName = "Button";
+  )
+})
+Button.displayName = "Button"
 
 const Input = React.forwardRef(({ className, ...props }, ref) => {
   return (
@@ -23,9 +24,9 @@ const Input = React.forwardRef(({ className, ...props }, ref) => {
       ref={ref}
       {...props}
     />
-  );
-});
-Input.displayName = "Input";
+  )
+})
+Input.displayName = "Input"
 
 const Card = React.forwardRef(({ className, ...props }, ref) => (
   <div
@@ -33,62 +34,63 @@ const Card = React.forwardRef(({ className, ...props }, ref) => (
     className={`rounded-lg border bg-card text-card-foreground shadow-sm ${className}`}
     {...props}
   />
-));
-Card.displayName = "Card";
+))
+Card.displayName = "Card"
 
 const StreamRecommendationAI = ({ subjectData, board }) => {
   const [recommendations, setRecommendations] = useState([]);
   const svgRef = useRef(null);
 
-  const streamData = {
-    Stream: [
+  const streamData = useMemo(()=>({
+    "Stream": [
       "Science (PCMB)", "Science (PCMC)", "Commerce", "Arts",
       "Computer Science (Diploma)", "Electronics", "Electrical", "Mechanical", "Civil",
       "Electrician", "Fitter", "Turner", "Welder", "Machinist", "Plumber"
     ],
-    Maths_Weight: [
+    "Maths_Weight": [
       0.5, 0.6, 0.4, 0.2,
       0.6, 0.5, 0.5, 0.4, 0.4,
       0.3, 0.3, 0.3, 0.3, 0.3, 0.2
     ],
-    Science_Weight: [
+    "Science_Weight": [
       0.6, 0.5, 0.2, 0.1,
       0.5, 0.6, 0.5, 0.5, 0.4,
       0.4, 0.4, 0.4, 0.4, 0.4, 0.3
     ],
-    Languages_Weight: [
+    "Languages_Weight": [
       0.1, 0.1, 0.3, 0.45,
       0.1, 0.1, 0.2, 0.1, 0.2,
       0.2, 0.2, 0.2, 0.2, 0.2, 0.2
     ],
-    Social_Studies_Weight: [
+    "Social_Studies_Weight": [
       0.1, 0.1, 0.4, 0.5,
       0.1, 0.1, 0.1, 0.1, 0.3,
       0.2, 0.2, 0.2, 0.2, 0.2, 0.4
-    ]
-  };
+    ],}),[]);
 
-  const BOARD_CATEGORIES = useMemo(() => ({
-    ICSE: {
-      Science: ['Physics', 'Chemistry', 'Biology'],
-      Languages: ['English', 'Second Language'],
-      Social_Studies: ['History civics', 'Geography'],
-      Mathematics: ['Mathematics'],
-    },
-    CBSE: {
-      Science: ['Science'],
-      Languages: ['English', 'Hindi/Kannada'],
-      Social_Studies: ['Social Science'],
-      Mathematics: ['Mathematics'],
-    },
-    STATEBOARD: {
-      Science: ['Science'],
-      Languages: ['FIRST LANGUAGE', 'SECOND LANGUAGE', 'THIRD LANGUAGE'],
-      Social_Studies: ['SOCIAL SCIENCE'],
-      Mathematics: ['MATHEMATICS'],
-    },
-  }), []);
-  
+  const BOARD_CATEGORIES = useMemo(
+    () => ({
+      ICSE: {
+        Science: ["Physics", "Chemistry", "Biology"],
+        Languages: ["English", "Second Language"],
+        Social_Studies: ["History civics", "Geography"],
+        Mathematics: ["Mathematics"],
+      },
+      CBSE: {
+        Science: ["Science"],
+        Languages: ["English", "Hindi/Kannada"],
+        Social_Studies: ["Social Studies"],
+        Mathematics: ["Mathematics"],
+      },
+      STATEBOARD: {
+        Science: ["Science"],
+        Languages: ["FIRST LANGUAGE", "SECOND LANGUAGE", "THIRD LANGUAGE"],
+        Social_Studies: ["SOCIAL SCIENCE"],
+        Mathematics: ["MATHEMATICS"],
+      },
+    }),
+    []
+  );
 
   const streams = [
     { name: "Science (PCMB)", category: "PUC", y: 100 },
@@ -109,68 +111,84 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
   ];
 
   const prepareSubjectMarks = useCallback(() => {
-    const config = BOARD_CATEGORIES[board.toUpperCase()];
+    const config = BOARD_CATEGORIES[board?.toUpperCase()];
     if (!config) {
-      console.error('Invalid board selected:', board);
+      console.error("Invalid board selected:", board);
       return null;
     }
-  
-    const computeAverageScore = (subjects) => {
-      const scores = subjects.map((subject) => {
-        const match = subjectData.find(
-          (data) => data.subject.toUpperCase() === subject.toUpperCase()
-        );
-        return Number(match?.score || 0);
-      });
-      const totalScore = scores.reduce((a, b) => a + b, 0);
-      return scores.length > 0 ? totalScore / subjects.length : 0;
+
+    const normalize = (str) => str.trim().toLowerCase();
+
+    const getAverageScore = (subjects) => {
+      const matchingSubjects = subjects
+        .map((subject) =>
+          subjectData.find((data) =>
+            normalize(data.subject).includes(normalize(subject))
+          )
+        )
+        .filter(Boolean);
+
+      if (matchingSubjects.length === 0) return 0;
+
+      return (
+        matchingSubjects.reduce((sum, subject) => sum + subject.score, 0) /
+        matchingSubjects.length
+      );
     };
-  
+
     return [
-      computeAverageScore(config.Mathematics),
-      computeAverageScore(config.Science),
-      computeAverageScore(config.Languages),
-      computeAverageScore(config.Social_Studies),
+      getAverageScore(config.Mathematics),
+      getAverageScore(config.Science),
+      getAverageScore(config.Languages),
+      getAverageScore(config.Social_Studies),
     ];
-  }, [board, subjectData, BOARD_CATEGORIES]);
+  }, [BOARD_CATEGORIES, board, subjectData]);
+
   
-  const streamGroups = useMemo(() => ({
-    PUC: streamData.Stream.slice(0, 4),
-    Diploma: streamData.Stream.slice(4, 9),
-    ITI: streamData.Stream.slice(9)
-  }), [streamData.Stream]);
   
-  const prioritizeStreamsWithinGroup = useCallback((studentMarks, group) => {
-    const subjectStrengths = studentMarks
-      .map((mark, index) => ({ mark, index }))
-      .sort((a, b) => b.mark - a.mark);
-  
-    const priorityBoost = [1.2, 1.1, 1.05, 1.0];
-  
-    return group.map((stream, idx) => {
-      const subjectWeights = [
-        streamData.Maths_Weight[idx] * (subjectStrengths[0].index === 0 ? priorityBoost[0] : 1),
-        streamData.Science_Weight[idx] * (subjectStrengths[1].index === 1 ? priorityBoost[1] : 1),
-        streamData.Languages_Weight[idx] * (subjectStrengths[2].index === 2 ? priorityBoost[2] : 1),
-        streamData.Social_Studies_Weight[idx] * (subjectStrengths[3].index === 3 ? priorityBoost[3] : 1)
-      ];
-  
-      const fitScore = subjectWeights.reduce((sum, weight, i) => sum + studentMarks[i] * weight, 0);
-      return { stream, fitScore };
-    }).sort((a, b) => b.fitScore - a.fitScore);
-  }, [
-    streamData.Maths_Weight,
-    streamData.Science_Weight,
-    streamData.Languages_Weight,
-    streamData.Social_Studies_Weight
-  ]);
-  
-  const recommendStreams = useCallback(() => {
+
+  const streamGroups = useMemo(
+    () => ({
+      PUC: streamData.Stream.slice(0, 4),
+      Diploma: streamData.Stream.slice(4, 9),
+      ITI: streamData.Stream.slice(9),
+    }),
+    [streamData.Stream]
+  );
+
+
+  const prioritizeStreamsWithinGroup = useCallback(
+    (studentMarks, group) => {
+      const subjectStrengths = studentMarks
+        .map((mark, index) => ({ mark, index }))
+        .sort((a, b) => b.mark - a.mark);
+
+      const priorityBoost = [1.2, 1.1, 1.05, 1.0];
+
+      return group
+        .map((stream, idx) => {
+          const subjectWeights = [
+            streamData.Maths_Weight[idx] * (subjectStrengths[0].index === 0 ? priorityBoost[0] : 1),
+            streamData.Science_Weight[idx] * (subjectStrengths[1].index === 1 ? priorityBoost[1] : 1),
+            streamData.Languages_Weight[idx] * (subjectStrengths[2].index === 2 ? priorityBoost[2] : 1),
+            streamData.Social_Studies_Weight[idx] * (subjectStrengths[3].index === 3 ? priorityBoost[3] : 1),
+          ];
+
+          const fitScore = subjectWeights.reduce(
+            (sum, weight, i) => sum + studentMarks[i] * weight,
+            0
+          );
+          return { stream, fitScore };
+        })
+        .sort((a, b) => b.fitScore - a.fitScore);
+    },
+    [streamData]
+  );const recommendStreams = useCallback(() => {
     const studentMarks = prepareSubjectMarks();
     if (!studentMarks) return;
-  
+
     const avgMarks = studentMarks.reduce((a, b) => a + b, 0) / studentMarks.length;
-  
+    console.log(studentMarks);
     let eligibleGroup;
     if (avgMarks >= 65) {
       eligibleGroup = streamGroups.PUC;
@@ -179,15 +197,17 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
     } else {
       eligibleGroup = streamGroups.ITI;
     }
-  
-    const rankedStreams = prioritizeStreamsWithinGroup(studentMarks, eligibleGroup);
-    setRecommendations(rankedStreams);
+
+    const recommendations = prioritizeStreamsWithinGroup(studentMarks, eligibleGroup);
+    setRecommendations(recommendations.slice(0, 5));
   }, [prepareSubjectMarks, streamGroups, prioritizeStreamsWithinGroup]);
+
   useEffect(() => {
     if (subjectData && subjectData.length > 0 && board) {
       recommendStreams();
     }
-  }, [subjectData, board, recommendStreams]); // No changes needed here
+  }, [subjectData, board, recommendStreams]);
+
   const generateCurvyBracePath = (startX, startY, endX, endY) => {
     // Create a more curly brace-like path
     const midX = (startX + endX) / 2;
