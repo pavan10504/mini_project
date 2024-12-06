@@ -116,9 +116,9 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
       console.error("Invalid board selected:", board);
       return null;
     }
-
+  
     const normalize = (str) => str.trim().toLowerCase();
-
+  
     const getAverageScore = (subjects) => {
       const matchingSubjects = subjects
         .map((subject) =>
@@ -127,22 +127,35 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
           )
         )
         .filter(Boolean);
-
-      if (matchingSubjects.length === 0) return 0;
-
-      return (
-        matchingSubjects.reduce((sum, subject) => sum + subject.score, 0) /
-        matchingSubjects.length
-      );
+  
+      if (matchingSubjects.length === 0) {
+        console.warn(`No matching subjects found for: ${subjects}`);
+        return 0;
+      }
+  
+      const scores = matchingSubjects.map((subject) => {
+        const score = Number(subject.score);
+        if (isNaN(score)) {
+          console.error(`Invalid score for subject: ${subject.subject}`);
+          return 0;
+        }
+        return score;
+      });
+  
+      return scores.reduce((sum, score) => sum + score, 0) / scores.length;
     };
-
-    return [
+  
+    const marks = [
       getAverageScore(config.Mathematics),
       getAverageScore(config.Science),
       getAverageScore(config.Languages),
       getAverageScore(config.Social_Studies),
     ];
+  
+    console.log("Prepared Marks:", marks);
+    return marks;
   }, [BOARD_CATEGORIES, board, subjectData]);
+  
 
   
   
@@ -186,9 +199,10 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
   );const recommendStreams = useCallback(() => {
     const studentMarks = prepareSubjectMarks();
     if (!studentMarks) return;
-
-    const avgMarks = studentMarks.reduce((a, b) => a + b, 0) / studentMarks.length;
-    console.log(studentMarks);
+    const numericMarks = studentMarks.map(Number);
+    console.log(numericMarks);
+    const avgMarks = numericMarks.reduce((a, b) => a + b, 0) / studentMarks.length;    
+    console.log(avgMarks);
     let eligibleGroup;
     if (avgMarks >= 65) {
       eligibleGroup = streamGroups.PUC;

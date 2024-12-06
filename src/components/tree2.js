@@ -2008,7 +2008,7 @@ const treeData = {
               }
           ]
       },
-      {Name:'DIPLOMO',
+      {Name:'DIPLOMA',
           children:[
               {Name:'Engineering Diploma Courses',
                   children:[

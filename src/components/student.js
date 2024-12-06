@@ -73,9 +73,8 @@ const StudentSelectionForm = ({ onSubmit, userinfon, userinfoa }) => {
       ],
       electiveGroups: {} // CBSE 10th Grade has no mandatory electives
     },
-    "StateBoard": {compulsory: [
-      'FIRST LANGUAGE', 'SECOND LANGUAGE', 'THIRD LANGUAGE', 'MATHEMATICS', 
-                                                     'SCIENCE', 'SOCIAL SCIENCE'
+    "STATEBOARD": {compulsory: [
+      'FIRST LANGUAGE', 'SECOND LANGUAGE', 'THIRD LANGUAGE', 'MATHEMATICS','SCIENCE', 'SOCIAL SCIENCE'
     ],
     electiveGroups: {}
     },
@@ -96,7 +95,7 @@ const StudentSelectionForm = ({ onSubmit, userinfon, userinfoa }) => {
 
   useEffect(() => {
     if (userinfoa >= 16 && userinfoa <= 18) {
-      setAvailableBoards(['ICSE', 'CBSE', 'StateBoard']);
+      setAvailableBoards(['ICSE', 'CBSE', 'STATEBOARD']);
     } else if (userinfoa > 18 && userinfoa < 22) {
       setAvailableBoards(['Engineering']);
     } else {
