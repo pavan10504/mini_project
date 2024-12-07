@@ -2466,7 +2466,7 @@ const AcademicNodeCard = ({ node, onClick }) => (
     >
         <h2 className="font-semibold text-base">{node.Name}</h2>
         {node.children?.length > 0 && (
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-base">
                 ({node.children.length} options)
             </p>
         )}

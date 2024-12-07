@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Plus, Route, BotMessageSquare,SquareLibrary,X } from 'lucide-react';
+import { Send, Plus, Route, BotMessageSquare, SquareLibrary, X } from 'lucide-react';
 import AcademicTreeVisualization from './tree2.js';
 import StudentSelectionForm from './student.js';
 import StreamRecommendationAI from './recomend.js';
@@ -217,15 +217,14 @@ const ChatbotLanding = ({ onToggleTree }) => {
               )}
             </Button>
             {showDropdown && (
-              <div className={`absolute top-full left-0 mt-2 z-50 flex flex-col gap-2 bg-gradient-to-r from-blue-200 to-purple-200 shadow-md rounded-lg p-4 transition-all duration-300 ${
-                showDropdown ? 'max-h-auto opacity-100' : 'max-h-0 opacity-0'
-              } overflow-hidden`}
-              style={{ width: '200px' }}>
-                <Button onClick={()=>{handleTreeToggle();setShowDropdown(false);}} className="p-2">
+              <div className={`absolute top-full left-0 mt-2 z-50 flex flex-col gap-2 bg-gradient-to-r from-blue-200 to-purple-200 shadow-md rounded-lg p-4 transition-all duration-300 ${showDropdown ? 'max-h-auto opacity-100' : 'max-h-0 opacity-0'
+                } overflow-hidden`}
+                style={{ width: '200px' }}>
+                <Button onClick={() => { handleTreeToggle(); setShowDropdown(false); }} className="p-2">
                   <Route className='h-4' />
                   Goal Navigator
                 </Button>
-                <Button onClick={()=>{handleRecommendation();setShowDropdown(false);}} className="p-2">
+                <Button onClick={() => { handleRecommendation(); setShowDropdown(false); }} className="p-2">
                   <SquareLibrary className='h-4' />
                   Recommendations
                 </Button>
@@ -234,29 +233,29 @@ const ChatbotLanding = ({ onToggleTree }) => {
           </div>
           <div className="relative top-0 right-0 text-2xl font-bold flex flex-row items-center justify-between">
             <h1 className="pr-2">Chatbot</h1>
-            <BotMessageSquare className="h-4 w-4" />
+            <BotMessageSquare className="h-6 w-6" />
           </div>
         </div>
         {showTree && (
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-200">
-                <Card className="relative w-[90%] lg:max-h-[90%] sm:max-h-[50%] md:h-[75%] xl:h-[90%] p-6 flex flex-col justify-center items-center overflow-auto">
-                  <AcademicTreeVisualization className="w-full" isVisible={showTree} />
-                  <Button onClick={handleTreeToggle} className="absolute bg-red-500 top-0 right-0 h-auto w-auto m-2">
-                  <X className="h-4 w-4" />
-                  </Button>
-                </Card>
-              </div>
-            )}
-            {streamRecommendations && showRecommedation && (
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-                <Card className="relative w-[90%] lg:max-h-[90%] sm:max-h-[50%] md:h-[75%] lg:h-[90%] p-6 overflow-auto">
-                  <StreamRecommendationAI subjectData={subjectData} board={studentData.selectedBoard} onClose={() => setStreamRecommendations(null)} />
-                  <Button onClick={handleRecommendation} className="absolute bg-red-500 top-0 right-0 h-auto w-auto m-2">
-                    <X className="h-4 w-4" />
-                  </Button>
-                </Card>
-              </div>
-            )}
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-200">
+            <Card className="relative w-[90%] lg:max-h-[90%] sm:max-h-[50%] md:h-[75%] xl:h-[90%] p-6 flex flex-col justify-center items-center overflow-auto">
+              <AcademicTreeVisualization className="w-full" isVisible={showTree} />
+              <Button onClick={handleTreeToggle} className="absolute bg-red-500 top-0 right-0 h-auto w-auto m-2">
+                <X className="h-4 w-4" />
+              </Button>
+            </Card>
+          </div>
+        )}
+        {streamRecommendations && showRecommedation && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+            <Card className="relative w-[90%] lg:max-h-[90%] sm:max-h-[50%] md:h-[75%] lg:h-[90%] p-6 overflow-auto">
+              <StreamRecommendationAI subjectData={subjectData} board={studentData.selectedBoard} onClose={() => setStreamRecommendations(null)} />
+              <Button onClick={handleRecommendation} className="absolute bg-red-500 top-0 right-0 h-auto w-auto m-2">
+                <X className="h-4 w-4" />
+              </Button>
+            </Card>
+          </div>
+        )}
         {showInfoCard && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
             <Card className="w-96 p-6">
