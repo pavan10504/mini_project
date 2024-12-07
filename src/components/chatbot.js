@@ -239,7 +239,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
         </div>
         {showTree && (
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-200">
-                <Card className="relative w-[90%] h-[90%] sm:h-[60%] md:h-[75%] p-6 flex flex-col justify-center items-center overflow-auto">
+                <Card className="relative w-[90%] lg:max-h-[90%] sm:max-h-[50%] md:h-[75%] xl:h-[90%] p-6 flex flex-col justify-center items-center overflow-auto">
                   <AcademicTreeVisualization className="w-full" isVisible={showTree} />
                   <Button onClick={handleTreeToggle} className="absolute bg-red-500 top-0 right-0 h-auto w-auto m-2">
                   <X className="h-4 w-4" />
@@ -249,7 +249,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
             )}
             {streamRecommendations && showRecommedation && (
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-                <Card className="relative w-[90%] h-[90%] sm:h-[60%] md:h-[75%] p-6 overflow-auto">
+                <Card className="relative w-[90%] lg:max-h-[90%] sm:max-h-[50%] md:h-[75%] lg:h-[90%] p-6 overflow-auto">
                   <StreamRecommendationAI subjectData={subjectData} board={studentData.selectedBoard} onClose={() => setStreamRecommendations(null)} />
                   <Button onClick={handleRecommendation} className="absolute bg-red-500 top-0 right-0 h-auto w-auto m-2">
                     <X className="h-4 w-4" />
