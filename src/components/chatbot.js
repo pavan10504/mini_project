@@ -237,7 +237,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
           {/* ... SVG content ... */}
         </svg>
       </div>
-      <Card className="w-full max-w-4xl h-[90%] max-h-[750px] p-6 shadow-xl overflow-hidden flex flex-col">
+      <Card className="w-full max-w-4xl h-[750px] p-6 shadow-xl overflow-hidden flex flex-col">
         <div className="relative flex justify-between mb-4">
           <div className='flex flex-col gap-3 items-center mb-4'>
             <Button className="left-0  flex items-center" onClick={() => setShowDropdown(!showDropdown)}>
