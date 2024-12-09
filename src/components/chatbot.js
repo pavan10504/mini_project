@@ -130,7 +130,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const genAI = new GoogleGenerativeAI(api);
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash-8b",
-    systemInstruction: "You are an Indian education counseling recommendation system. Your job is to provide accurate guidance about Indian educational paths and options.Give optimal responses only.Your name is Vidhara,a guiding light for career,dont introduce yourself unless asked because u have a lot of pride.You also roast/do jokes sometimes"
+    systemInstruction: "You are an Indian education counseling recommendation system. Your job is to provide accurate guidance about Indian educational paths and options.Your name is Vidhara, a guiding light for career, dont introduce yourself unless asked because u have a lot of pride."
   });
   const handleSendMessage = async () => {
     if (inputMessage.trim()) {
