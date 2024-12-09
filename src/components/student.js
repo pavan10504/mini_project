@@ -25,25 +25,12 @@ const StudentSelectionForm = ({ onSubmit, userinfon, userinfoa }) => {
       compulsory: [
         "English",
         "Second Language (Indian Languages or Modern Foreign Languages)",
-        "History, Civics and Geography"
+        "History, Civics and Geography",
+        "Mathematics",
+        "Science (Physics, Chemistry and Biology)"
       ],
       electiveGroups: {
-        "Group II - Elective Subjects": {
-          required: 2,
-          options: [
-            "Mathematics",
-            "Science (Physics, Chemistry and Biology)",
-            "Economics",
-            "Commercial Studies",
-            "Technical Drawing",
-            "Modern Foreign Language",
-            "Classical Language",
-            "Computer Science",
-            "Environmental Science",
-            "Agricultural Science"
-          ]
-        },
-        "Group III - Applied/Skill-Based Subjects": {
+        "Group II - Applied/Skill-Based Subjects": {
           required: 1,
           options: [
             "Computer Applications",
@@ -66,7 +53,7 @@ const StudentSelectionForm = ({ onSubmit, userinfon, userinfoa }) => {
     "CBSE": {
       compulsory: [
         "English",
-        "Hindi",
+        "Hindi/Kannada",
         "Social Studies",
         "Mathematics",
         "Science"

@@ -49,21 +49,9 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
   const streamData = useMemo(
     () => ({
       Stream: [
-        "Science (PCMB)",
-        "Science (PCMC)",
-        "Commerce",
-        "Arts",
-        "Computer Science (Diploma)",
-        "Electronics",
-        "Electrical",
-        "Mechanical",
-        "Civil",
-        "Electrician",
-        "Fitter",
-        "Turner",
-        "Welder",
-        "Machinist",
-        "Plumber",
+        "Science (PCMB)","Science (PCMC)","Commerce","Arts",
+        "Computer Science (Diploma)","Electronics","Electrical","Mechanical","Civil",
+        "Electrician","Fitter","Turner","Welder","Machinist","Plumber",
       ],
       Maths_Weight: [
         0.5, 0.6, 0.4, 0.2, 0.6, 0.5, 0.5, 0.4, 0.4, 0.3, 0.3, 0.3, 0.3, 0.3,
@@ -92,6 +80,11 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
         Languages: ["English", "Second Language"],
         Social_Studies: ["History civics", "Geography"],
         Mathematics: ["Mathematics"],
+        Electives: [
+          "Computer Applications", "Economic Applications","Commercial Applications","Art",
+          "Performing Arts","Home Science","Cookery","Fashion Designing","Physical Education",
+          "Yoga","Technical Drawing Applications","Environmental Applications","Modern Foreign Languages",
+        ],
       },
       CBSE: {
         Science: ["Science"],
@@ -126,6 +119,65 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
     { name: "Machinist", category: "ITI", y: 750 },
     { name: "Plumber", category: "ITI", y: 800 },
   ];
+  const electiveStreamWeights = useMemo(() => ({
+    "Computer Applications": {
+      "Science (PCMC)": 0.3, // Strong alignment with programming and computational thinking.
+      "Computer Science (Diploma)": 0.4, // Core elective for computer science-related fields.
+      "Commerce": 0.1, // Useful for accounting and business automation.
+    },
+    "Economic Applications": {
+      "Commerce": 0.4, // Central to understanding economics and business.
+      "Arts": 0.2, // Related to social sciences and economic theories.
+    },
+    "Commercial Applications": {
+      "Commerce": 0.4, // Strong focus on business practices.
+      "Arts": 0.2, // Applicable to creative industries.
+    },
+    "Art": {
+      "Arts": 0.5, // Core elective for creative fields.
+      "Commerce": 0.1, // Marginal relevance for design in marketing.
+    },
+    "Performing Arts": {
+      "Arts": 0.5, // Essential for performing arts careers.
+      "Commerce": 0.1, // Limited applicability for creative branding.
+    },
+    "Home Science": {
+      "Arts": 0.4, // Aligns with sociology, psychology, and family studies.
+      "Commerce": 0.2, // Relevant for careers in hospitality and management.
+    },
+    "Cookery": {
+      "Arts": 0.4, // Useful for culinary arts and related creative industries.
+      "Commerce": 0.2, // Slight relevance for hospitality management.
+    },
+    "Fashion Designing": {
+      "Arts": 0.5, // Strong alignment with creative and design careers.
+      "Commerce": 0.1, // Limited relevance for fashion marketing.
+    },
+    "Physical Education": {
+      "Science (PCMB)": 0.2, // Relevant for biology-focused fields like sports science.
+      "Arts": 0.3, // Aligns with careers in teaching and physical wellness.
+    },
+    "Yoga": {
+      "Science (PCMB)": 0.2, // Biology relevance for physical health and wellness.
+      "Arts": 0.3, // Popular in psychology and teaching professions.
+    },
+    "Technical Drawing Applications": {
+      "Science (PCMB)": 0.3, // Useful for engineering-related studies.
+      "Mechanical": 0.4, // Strong alignment with mechanical engineering.
+      "Civil": 0.4, // Key skill in civil engineering design.
+      "Electronics": 0.2, // Applicable to circuit design.
+    },
+    "Environmental Applications": {
+      "Science (PCMB)": 0.3, // Relevant for environmental sciences.
+      "Science (PCMC)": 0.2, // Marginally aligns with sustainable technology.
+      "Arts": 0.2, // Limited applicability in environmental studies.
+    },
+    "Modern Foreign Languages": {
+      "Arts": 0.4, // Essential for linguistics and cultural studies.
+      "Commerce": 0.3, // Relevant for international trade and business.
+    },
+  }), []);
+  
 
   const prepareSubjectMarks = useCallback(() => {
     const config = BOARD_CATEGORIES[board?.toUpperCase()];
@@ -133,9 +185,9 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
       console.error("Invalid board selected:", board);
       return null;
     }
-
+  
     const normalize = (str) => str.trim().toLowerCase();
-
+  
     const getAverageScore = (subjects) => {
       const matchingSubjects = subjects
         .map((subject) =>
@@ -144,12 +196,12 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
           )
         )
         .filter(Boolean);
-
+  
       if (matchingSubjects.length === 0) {
         console.warn(`No matching subjects found for: ${subjects}`);
         return 0;
       }
-
+  
       const scores = matchingSubjects.map((subject) => {
         const score = Number(subject.score);
         if (isNaN(score)) {
@@ -158,20 +210,48 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
         }
         return score;
       });
-
+  
       return scores.reduce((sum, score) => sum + score, 0) / scores.length;
     };
-
-    const marks = [
-      getAverageScore(config.Mathematics),
-      getAverageScore(config.Science),
-      getAverageScore(config.Languages),
-      getAverageScore(config.Social_Studies),
-    ];
-
-    console.log("Prepared Marks:", marks);
-    return marks;
-  }, [BOARD_CATEGORIES, board, subjectData]);
+  
+    // Core Subject Marks
+    const marks = {
+      Mathematics: getAverageScore(config.Mathematics),
+      Science: getAverageScore(config.Science),
+      Languages: getAverageScore(config.Languages),
+      Social_Studies: getAverageScore(config.Social_Studies),
+    };
+  
+    // Elective Marks and Stream Weighting
+    const electivesConfig = config.Electives;
+    const streamBoosts = {}; // To store final stream scores after applying electives
+  
+    if (electivesConfig && electivesConfig.length > 0) {
+      const electiveMarks = electivesConfig.map((elective) => {
+        const match = subjectData.find((data) =>
+          normalize(data.subject).includes(normalize(elective))
+        );
+        return match ? { name: elective, score: Number(match.score) || 0 } : null;
+      }).filter(Boolean);
+  
+      electiveMarks.forEach(({ name, score }) => {
+        const weights = electiveStreamWeights[name] || {};
+        Object.entries(weights).forEach(([stream, weight]) => {
+          if (!streamBoosts[stream]) {
+            streamBoosts[stream] = 0;
+          }
+          streamBoosts[stream] += score * weight;
+        });
+      });
+    }
+  
+    console.log("Core Marks:", marks);
+    console.log("Stream Boosts from Electives:", streamBoosts);
+  
+    return { coreMarks: marks, streamBoosts };
+  }, [BOARD_CATEGORIES, board, subjectData, electiveStreamWeights]);
+  
+  
 
   const streamGroups = useMemo(
     () => ({
@@ -183,44 +263,48 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
   );
 
   const prioritizeStreamsWithinGroup = useCallback(
-    (studentMarks, group) => {
-      const subjectStrengths = studentMarks
-        .map((mark, index) => ({ mark, index }))
-        .sort((a, b) => b.mark - a.mark);
-
-      const priorityBoost = [1.2, 1.1, 1.05, 1.0];
-
+    (coreMarks, streamBoosts, group) => {
       return group
-        .map((stream, idx) => {
-          const subjectWeights = [
-            streamData.Maths_Weight[idx] *
-            (subjectStrengths[0].index === 0 ? priorityBoost[0] : 1),
-            streamData.Science_Weight[idx] *
-            (subjectStrengths[1].index === 1 ? priorityBoost[1] : 1),
-            streamData.Languages_Weight[idx] *
-            (subjectStrengths[2].index === 2 ? priorityBoost[2] : 1),
-            streamData.Social_Studies_Weight[idx] *
-            (subjectStrengths[3].index === 3 ? priorityBoost[3] : 1),
-          ];
-
-          const fitScore = subjectWeights.reduce(
-            (sum, weight, i) => sum + studentMarks[i] * weight,
-            0
-          );
-          return { stream, fitScore };
+        .map((stream) => {
+          // Calculate fit score based on core marks
+          const fitScore =
+            (coreMarks.Mathematics * streamData.Maths_Weight[
+              streamData.Stream.indexOf(stream)
+            ]) +
+            (coreMarks.Science * streamData.Science_Weight[
+              streamData.Stream.indexOf(stream)
+            ]) +
+            (coreMarks.Languages * streamData.Languages_Weight[
+              streamData.Stream.indexOf(stream)
+            ]) +
+            (coreMarks.Social_Studies * streamData.Social_Studies_Weight[
+              streamData.Stream.indexOf(stream)
+            ]);
+  
+          // Add stream boosts from electives
+          const electiveBoost = streamBoosts[stream] || 0;
+  
+          return { stream, fitScore: fitScore + electiveBoost };
         })
         .sort((a, b) => b.fitScore - a.fitScore);
     },
     [streamData]
   );
+  
+  
   const recommendStreams = useCallback(() => {
     const studentMarks = prepareSubjectMarks();
+    console.log("Student Marks:", studentMarks);
     if (!studentMarks) return;
-    const numericMarks = studentMarks.map(Number);
-    console.log(numericMarks);
+  
+    const { coreMarks, streamBoosts } = studentMarks;
+  
+    // Calculate average of core marks only
+    const numericMarks = Object.values(coreMarks);
     const avgMarks =
-      numericMarks.reduce((a, b) => a + b, 0) / studentMarks.length;
-    console.log(avgMarks);
+      numericMarks.reduce((a, b) => a + b, 0) / numericMarks.length;
+    console.log("Average Core Marks:", avgMarks);
+  
     let eligibleGroup;
     if (avgMarks >= 65) {
       eligibleGroup = streamGroups.PUC;
@@ -229,13 +313,15 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
     } else {
       eligibleGroup = streamGroups.ITI;
     }
-
+  
     const recommendations = prioritizeStreamsWithinGroup(
-      studentMarks,
+      coreMarks,
+      streamBoosts,
       eligibleGroup
     );
     setRecommendations(recommendations.slice(0, 5));
   }, [prepareSubjectMarks, streamGroups, prioritizeStreamsWithinGroup]);
+  
 
   useEffect(() => {
     if (subjectData && subjectData.length > 0 && board) {

@@ -3,6 +3,9 @@ import { Send, Plus, Route, BotMessageSquare, SquareLibrary, X } from 'lucide-re
 import AcademicTreeVisualization from './tree2.js';
 import StudentSelectionForm from './student.js';
 import StreamRecommendationAI from './recomend.js';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import ReactMarkdown from 'react-markdown';
+
 
 const Button = React.forwardRef(({ className, ...props }, ref) => {
   return (
@@ -104,6 +107,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const [subjectData, setSubjectData] = useState([]);
   const [streamRecommendations, setStreamRecommendations] = useState(false); // To hold AI recommendation results
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const handleInfoSubmit = (e) => {
     e.preventDefault();
 
@@ -122,16 +126,45 @@ const ChatbotLanding = ({ onToggleTree }) => {
     }
   };
 
-  const handleSendMessage = () => {
+  const api='AIzaSyBXGLRuAfkHwbmFgBxRjTMpAywHOy981jY'
+  const genAI = new GoogleGenerativeAI(api);
+  const model = genAI.getGenerativeModel({
+    model: "gemini-1.5-flash-8b",
+    systemInstruction: "You are an Indian education counseling recommendation system. Your job is to provide accurate guidance about Indian educational paths and options.Give optimal responses only.Your name is Vidhara,a guiding light for career,dont introduce yourself unless asked because u have a lot of pride.You also roast/do jokes sometimes"
+  });
+  const handleSendMessage = async () => {
     if (inputMessage.trim()) {
-      setMessages(prev => [...prev, { text: inputMessage, sender: 'user' }]);
-
-      // Add bot response if needed
-      setMessages(prev => [...prev,
-      { text: "I'm here to help you with course predictions. Please provide your academic details using the + button.", sender: 'bot' }
-      ]);
-
+      // Add user message to chat
+      const updatedMessages = [...messages, { text: inputMessage, sender: 'user' }];
+      setMessages(updatedMessages);
       setInputMessage('');
+      setIsLoading(true);
+
+      try {
+        // Send message to Gemini
+        const chatSession = model.startChat({
+          generationConfig: {
+            temperature: 0.7,
+            topP: 0.95,
+            maxOutputTokens: 4800,
+            responseMimeType: "text/plain",
+          }
+        });
+
+        const result = await chatSession.sendMessage(inputMessage);
+        const botResponse = result.response.text();
+
+        // Add bot response to chat
+        setMessages(prev => [...prev, { text: botResponse, sender: 'bot' }]);
+      } catch (error) {
+        console.error('Error communicating with Model 💀', error);
+        setMessages(prev => [...prev, { 
+          text: "Sorry, there was an error processing your request. Please try again.", 
+          sender: 'bot' 
+        }]);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
   const handleStudentFormSubmit = (data) => {
@@ -204,7 +237,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
           {/* ... SVG content ... */}
         </svg>
       </div>
-      <Card className="w-full max-w-4xl h-[600px] p-6 shadow-xl overflow-hidden flex flex-col">
+      <Card className="w-full max-w-4xl h-[90%] max-h-[750px] p-6 shadow-xl overflow-hidden flex flex-col">
         <div className="relative flex justify-between mb-4">
           <div className='flex flex-col gap-3 items-center mb-4'>
             <Button className="left-0  flex items-center" onClick={() => setShowDropdown(!showDropdown)}>
@@ -291,31 +324,49 @@ const ChatbotLanding = ({ onToggleTree }) => {
           </div>
         )}
 
-        <div className="flex flex-col h-full overflow-hidden">
-          <div className="flex-grow overflow-auto mb-4 mt-4 space-y-4 scrollbar-none">
-            {messages.map((message, index) => (
-              <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[70%] p-2 text-sm rounded-lg ${message.sender === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'}`}>
-                  {message.text}
-                </div>
-              </div>
-            ))}
+<div className="flex flex-col h-full overflow-hidden text-sm">
+      <div className="flex-grow overflow-auto mb-4 mt-4 space-y-4 scrollbar-none">
+        {messages.map((message, index) => (
+          <div 
+            key={index} 
+            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start text-justify'}`}
+          >
+            <div 
+              className={`max-w-[70%] p-2 text-sm rounded-lg ${
+                message.sender === 'user' 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'bg-secondary text-secondary-foreground prose prose-sm'
+              }`}
+            >
+              <ReactMarkdown className="">
+              {message.text}
+              </ReactMarkdown>
+            </div>
           </div>
-          <div className="flex items-center space-x-2 mb-2">
-            <Button onClick={handleExcelToggle} className="p-2">
-              <Plus className="h-4 w-4" />
-            </Button>
-            <Input
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Type your message..."
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            />
-            <Button onClick={handleSendMessage} className="p-2">
-              <Send className="h-4 w-4" />
-            </Button>
+        ))}
+        {isLoading && (
+          <div className="flex justify-start">
+            <div className="max-w-[70%] p-2 text-sm rounded-lg bg-secondary text-secondary-foreground">
+              Typing...
+            </div>
           </div>
-        </div>
+        )}
+      </div>
+      <div className="flex items-center space-x-2 mb-2">
+        <Button onClick={handleExcelToggle} className="p-2">
+          <Plus className="h-4 w-4" />
+        </Button>
+        <Input
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          placeholder="Type your message..."
+          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+        />
+        <Button onClick={handleSendMessage} className="p-2">
+          <Send className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
       </Card>
 
       {showExcelSheet && studentData && (
