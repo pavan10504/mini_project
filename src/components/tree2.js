@@ -2478,7 +2478,8 @@ const AcademicTreeVisualization = () => {
     const [nodeHistory, setNodeHistory] = useState([treeData]);
     const [currentPage, setCurrentPage] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [contentData, setContentData] = useState({});
+    const [breadcrumbContent, setBreadcrumbContent] = useState("");
     const handleNodeClick = (node) => {
         setNodeHistory([...nodeHistory, node]);
         setCurrentNode(node);
@@ -2574,6 +2575,97 @@ const AcademicTreeVisualization = () => {
         ));
     };
 
+    useEffect(() => {
+        const filePath = `${process.env.PUBLIC_URL}/test.ini`;
+        fetch(filePath)
+            .then((response) => {
+                console.log('Response status:', response.status);
+                return response.text();
+            })
+            .then((data) => {
+                const content = {};
+                let currentSection = null;
+    
+                data.split('\n').forEach((line) => {
+                    line = line.trim();
+                    if (line.startsWith('[') && line.endsWith(']')) {
+                        currentSection = line.slice(1, -1);
+                        content[currentSection] = '';  // Initialize as empty string
+                    }
+                    else if (currentSection && line) {
+                        // Append line with newline if content already exists
+                        content[currentSection] += content[currentSection] ? '\n' + line : line;
+                    }
+                });
+    
+                console.log('Parsed Content:', content);
+                console.log('Parsed Content Keys:', Object.keys(content));
+                setContentData(content);
+            })
+            .catch((error) => {
+                console.error("Error loading INI file:", error);
+            });
+    }, []);
+
+    useEffect(() => {
+        if (nodeHistory.length > 0 && Object.keys(contentData).length > 0) {
+            // Normalize key function
+            // Accumulate content for all nodes in the breadcrumb
+            const contentWithTitles = nodeHistory
+            .map(node => {
+                // Exact matching (case-sensitive)
+                const matchedKey = Object.keys(contentData).find(key => 
+                    key === node.Name
+                );
+                    
+                    return matchedKey ? {
+                        title: node.Name,
+                        content: contentData[matchedKey]
+                    } : null;
+                })
+                .filter(item => item !== null);
+    
+            // Prepare accumulated content
+            const formattedContent = contentWithTitles.map(item => 
+                `${item.title}\n${item.content}`
+            ).join('\n\n');
+    
+            console.log('Content with Titles:', contentWithTitles);
+    
+            setBreadcrumbContent(
+                formattedContent || 'No content available for this path.'
+            );
+        }
+    }, [nodeHistory, contentData]);
+    
+    const renderContent = (content) => {
+        if (typeof content !== 'string') {
+            return <p>Invalid content format</p>;
+        }
+    
+        if (!content.trim()) {
+            return <p>No content available.</p>;
+        }
+    
+        // Split content into sections
+        const sections = content.split('\n\n');
+    
+        return sections.map((section, index) => {
+            // Split section into title and content
+            const [title, ...contentLines] = section.split('\n');
+            const sectionContent = contentLines.join(' ');
+    
+            return (
+                <div key={index} className="mb-6">
+                    <h2 className="text-2xl font-bold text-blue-800 mb-3 border-b-2 border-blue-200 pb-2">
+                        {title}
+                    </h2>
+                    <p className="text-gray-700 leading-relaxed">{sectionContent}</p>
+                    <hr className="border-t-2 border-gray-200 my-4" />
+                </div>
+            );
+        });
+    };
     return (
         <div className="relative flex flex-col items-center justify-center w-full h-full px-4 sm:px-0">
             <div className="absolute top-0 flex justify-between bg-white w-full h-[20%] mb-4 p-2">
@@ -2613,9 +2705,10 @@ const AcademicTreeVisualization = () => {
                         ))}
                         {getPagedChildren.length === 0 && (
                             <div className="col-span-full text-justify bg-gray-100 p-6 rounded-lg">
-                                <p className="text-gray-700 text-sm leading-relaxed">
-                                    Lorem ipsum (/ˌlɔː.rəm ˈɪp.səm/ LOR-əm IP-səm) is a dummy or placeholder text commonly used in graphic design, publishing, and web development to fill empty spaces in a layout that does not yet have content. Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a 1st-century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin. The first two words themselves are a truncation of dolorem ipsum ("pain itself"). Versions of the Lorem ipsum text have been used in typesetting at least since the 1960s, when it was popularized by advertisements for Letraset transfer sheets.[1] Lorem ipsum was introduced to the digital world in the mid-1980s, when Aldus employed it in graphic and word-processing templates for its desktop publishing program PageMaker. Other popular word processors, including Pages and Microsoft Word, have since adopted Lorem ipsum,[2] as have many LaTeX packages,[3][4][5] web content managers such as Joomla! and WordPress, and CSS libraries such as Semantic UI.
-                                </p>
+                                <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">
+                                   
+                                    {renderContent(breadcrumbContent)}
+                                </div>
                             </div>
                         )}
                     </div>

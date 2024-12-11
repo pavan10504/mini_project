@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Send, Plus, Route, BotMessageSquare, SquareLibrary, X } from 'lucide-react';
 import AcademicTreeVisualization from './tree2.js';
 import StudentSelectionForm from './student.js';
@@ -108,6 +108,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
   const [streamRecommendations, setStreamRecommendations] = useState(false); // To hold AI recommendation results
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [typingMessage, setTypingMessage] = useState('');
   const handleInfoSubmit = (e) => {
     e.preventDefault();
 
@@ -126,11 +127,11 @@ const ChatbotLanding = ({ onToggleTree }) => {
     }
   };
 
-  const api='AIzaSyBXGLRuAfkHwbmFgBxRjTMpAywHOy981jY'
+  const api = 'AIzaSyBXGLRuAfkHwbmFgBxRjTMpAywHOy981jY'
   const genAI = new GoogleGenerativeAI(api);
   const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash-8b",
-    systemInstruction: "You are an Indian education counseling recommendation system. Your job is to provide accurate guidance about Indian educational paths and options.Your name is Vidhara, a guiding light for career, dont introduce yourself unless asked because u have a lot of pride."
+    systemInstruction: "you are an indian education counseling recomendation system, your only job is to send the students in the right direction by answering their questions correctly and recommending the best solution according to indian educational system standards.Your name is Vidhara, a guiding light for career, dont introduce yourself unless asked.The website where u are deployed is all about helping students in their education"
   });
   const handleSendMessage = async () => {
     if (inputMessage.trim()) {
@@ -142,7 +143,19 @@ const ChatbotLanding = ({ onToggleTree }) => {
 
       try {
         // Send message to Gemini
+        const chatHistory = messages.map(msg => ({
+          role: msg.sender === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.text }]
+        }));
+
+        // Add current user message
+        chatHistory.push({
+          role: 'user',
+          parts: [{ text: inputMessage }]
+        });
+
         const chatSession = model.startChat({
+          history: chatHistory, // Add the entire chat history
           generationConfig: {
             temperature: 0.7,
             topP: 0.95,
@@ -155,17 +168,35 @@ const ChatbotLanding = ({ onToggleTree }) => {
         const botResponse = result.response.text();
 
         // Add bot response to chat
-        setMessages(prev => [...prev, { text: botResponse, sender: 'bot' }]);
+        setTypingMessage('');
+        typeMessage(botResponse, setTypingMessage, () => {
+          // Once typing is complete, add the full message to messages
+          setMessages(prev => [...prev, { text: botResponse, sender: 'bot' }]);
+          setTypingMessage('');
+        });
       } catch (error) {
         console.error('Error communicating with Model 💀', error);
-        setMessages(prev => [...prev, { 
-          text: "Sorry, there was an error processing your request. Please try again.", 
-          sender: 'bot' 
+        setMessages(prev => [...prev, {
+          text: "Sorry, there was an error processing your request. Please try again.",
+          sender: 'bot'
         }]);
       } finally {
         setIsLoading(false);
       }
     }
+  };
+  const typeMessage = (message, setTypingMessage, onComplete) => {
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+      if (currentIndex <= message.length) {
+        setTypingMessage(message.slice(0, currentIndex));
+        currentIndex++;
+      } else {
+        clearInterval(typingInterval);
+        if (onComplete) onComplete();
+      }
+    }, 1); // Adjust speed here (lower number = faster typing)
+    return () => clearInterval(typingInterval);
   };
   const handleStudentFormSubmit = (data) => {
     setStudentData(data);
@@ -230,6 +261,19 @@ const ChatbotLanding = ({ onToggleTree }) => {
     setShowTree(!showTree);
   };
 
+  // Create a ref for the scrollable container
+  const messagesEndRef = useRef(null);
+
+  // Function to scroll to the bottom
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Effect to scroll to bottom whenever messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, typingMessage]);
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-200 to-purple-200">
       <div className="absolute top-0 left-0 m-4">
@@ -265,7 +309,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
             )}
           </div>
           <div className="relative top-0 right-0 text-2xl font-bold flex flex-row items-center justify-between">
-            <h1 className="pr-2">Chatbot</h1>
+            <h1 className="pr-2 ">VIDHARA</h1>
             <BotMessageSquare className="h-6 w-6" />
           </div>
         </div>
@@ -323,50 +367,68 @@ const ChatbotLanding = ({ onToggleTree }) => {
             </Card>
           </div>
         )}
-
-<div className="flex flex-col h-full overflow-hidden text-sm">
-      <div className="flex-grow overflow-auto mb-4 mt-4 space-y-4 scrollbar-none">
-        {messages.map((message, index) => (
-          <div 
-            key={index} 
-            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start text-justify'}`}
-          >
-            <div 
-              className={`max-w-[70%] p-2 text-sm rounded-lg ${
-                message.sender === 'user' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-secondary text-secondary-foreground prose prose-sm'
-              }`}
-            >
-              <ReactMarkdown className="">
-              {message.text}
-              </ReactMarkdown>
-            </div>
+        <div className="flex flex-col h-full overflow-hidden text-sm">
+          <div className="flex-grow overflow-auto mb-4 mt-4 space-y-4 scrollbar-none">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start text-justify'}`}
+              >
+                <div
+                  className={`max-w-[70%] p-2 text-sm rounded-lg ${message.sender === 'user'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-secondary-foreground'
+                    }`}
+                >
+                  <ReactMarkdown className={`${message.sender === 'user' ? ' ' : 'prose prose-sm'}`}>
+                    {message.text}
+                  </ReactMarkdown>
+                  <div ref={messagesEndRef} />
+                </div>
+              </div>
+            ))}
+            {typingMessage && (
+              <div className="flex justify-start">
+                <div
+                  className={`max-w-[70%] p-2 text-sm rounded-lg bg-secondary text-secondary-foreground text-justify`}
+                >
+                  <ReactMarkdown className="prose prose-sm">
+                    {typingMessage}
+                  </ReactMarkdown>
+                  <div ref={messagesEndRef} />
+                </div>
+              </div>
+            )}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="max-w-[70%] p-3 text-sm rounded-lg bg-gray-100 text-gray-800 shadow-sm">
+                  <div className="flex items-center space-x-2">
+                    <div className="text-sm font-medium">Thinking</div>
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '100ms' }}></div>
+                      <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '200ms' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-        ))}
-        {isLoading && (
-          <div className="flex justify-start">
-            <div className="max-w-[70%] p-2 text-sm rounded-lg bg-secondary text-secondary-foreground">
-              Typing...
-            </div>
+          <div className="flex items-center space-x-2 mb-2">
+            <Button onClick={handleExcelToggle} className="p-2">
+              <Plus className="h-4 w-4" />
+            </Button>
+            <Input
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Type your message..."
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            />
+            <Button onClick={handleSendMessage} className="p-2">
+              <Send className="h-4 w-4" />
+            </Button>
           </div>
-        )}
-      </div>
-      <div className="flex items-center space-x-2 mb-2">
-        <Button onClick={handleExcelToggle} className="p-2">
-          <Plus className="h-4 w-4" />
-        </Button>
-        <Input
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type your message..."
-          onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-        />
-        <Button onClick={handleSendMessage} className="p-2">
-          <Send className="h-4 w-4" />
-        </Button>
-      </div>
-    </div>
+        </div>
       </Card>
 
       {showExcelSheet && studentData && (
