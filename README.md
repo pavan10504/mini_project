@@ -2,7 +2,7 @@
 
 # 🎓 Vidhara - AI-Powered Career Guidance System
 
-<img src="src/components/WhatsApp Image 2024-12-11 at 19.45.12_fe34a796.jpg" alt="Vidhara Bot" width="200"/>
+🤖
 
 **Your AI companion for navigating the Indian education system**
 
@@ -98,6 +98,8 @@ Whether you're confused about choosing between Science, Commerce, or Arts, or wo
    cd mini_project
    ```
 
+   > **Note**: Replace `pavan10504` with your username if you've forked the repository.
+
 2. **Install dependencies**
    ```bash
    npm install
@@ -181,7 +183,7 @@ This creates an optimized production build in the `build` folder.
 ## 📁 Project Structure
 
 ```
-mini_project/
+vidhara/
 ├── public/
 │   ├── index.html          # HTML template
 │   ├── test.ini            # Career pathway content data
@@ -248,7 +250,7 @@ Contributions are welcome! Here's how you can help:
 
 ## 📄 License
 
-This project is open source and available under the [ISC License](LICENSE).
+This project is open source and available under the ISC License.
 
 ---
 
