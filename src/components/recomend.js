@@ -346,8 +346,8 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
     );
   };
   return (
-    <div className="min-h-screen h-auto w-full bg-gradient-to-br from-blue-50 to-blue-100 p-8 flex flex-col items-center">
-      <div className="w-full h-auto bg-white shadow-2xl rounded-2xl p-8">
+    <div className="min-h-[600px] h-[650px] w-full  p-8 flex bg-gray-200 flex-col items-center">
+      <div className="w-full h-auto bg-gray-200 p-8 overflow-hidden">
         <h1 className="text-4xl font-extrabold text-center text-blue-900 mb-8">
           Stream Navigator
         </h1>
@@ -357,7 +357,7 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
               ref={svgRef}
               viewBox="0 0 1600 1000"
               xmlns="http://www.w3.org/2000/svg"
-              className="w-full left-0 top-0 h-full"
+              className="w-full left-0 top-0 h-full bg-gray-300"
             >
               <motion.g
                 initial={{ x: -200, opacity: 0 }}
@@ -451,7 +451,7 @@ const StreamRecommendationAI = ({ subjectData, board }) => {
           </div>
 
           {recommendations.length > 0 && (
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="ml-6 mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
               {recommendations.map((rec, idx) => (
                 <motion.div
                   key={idx}

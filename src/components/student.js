@@ -81,12 +81,10 @@ const StudentSelectionForm = ({ onSubmit, userinfon, userinfoa }) => {
   };
 
   useEffect(() => {
-    if (userinfoa >= 16 && userinfoa <= 18) {
+    if (userinfoa >= 15 && userinfoa <= 18) {
       setAvailableBoards(['ICSE', 'CBSE', 'STATEBOARD']);
-    } else if (userinfoa > 18 && userinfoa < 22) {
-      setAvailableBoards(['Engineering']);
-    } else {
-      setAvailableBoards([]);
+    } else if(userinfoa <= 14 || userinfoa > 18) {
+      alert('The age should be 15-18');
     }
   }, [userinfoa]);
 
