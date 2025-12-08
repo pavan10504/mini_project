@@ -123,7 +123,7 @@ const ChatbotLanding = ({ onToggleTree }) => {
     }
   };
 
-  const api = 'AIzaSyBXGLRuAfkHwbmFgBxRjTMpAywHOy981jY'
+  const api = 'AIzaSyBTUiqlVv7i1uI54pgp2Rwgkbp6r-43H0w'
   const genAI = new GoogleGenerativeAI(api);
   const model = genAI.getGenerativeModel({
     model: "gemini-flash-latest",
